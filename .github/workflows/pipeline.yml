@@ -1,0 +1,64 @@
+name: Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+    types: [opened, synchronize]
+
+jobs:
+  
+  avoid_redundancy:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Cancel Previous Redundant Builds
+      uses: styfle/cancel-workflow-action@0.9.1
+      with:
+        access_token: ${{ github.token }}
+
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+      - name: Install dependencies
+        run: yarn install --no-audit --no-fund --no-optional
+      - name: Lint
+        run: yarn run eslint
+
+  prettier:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+      - name: Install dependencies
+        run: yarn install --no-audit --no-fund --no-optional
+      - name: Prettier
+        run: yarn run prettier
+
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+      - name: Install dependencies
+        run: yarn install --no-audit --no-fund --no-optional
+      - name: Build
+        run: yarn run build
+
+
