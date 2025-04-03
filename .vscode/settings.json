@@ -1,9 +1,12 @@
 {
+  "eslint.useFlatConfig": true,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll": "always",
     "source.fixAll.eslint": "always"
   },
-  "eslint.validate": ["typescript"]
+  "eslint.validate": ["typescript"],
+  "eslint.workingDirectories": [{ "mode": "location" }],
+
 }
