@@ -1,0 +1,12 @@
+POST http://localhost:8080/api/gpt
+Content-Type: application/json
+
+{
+  "data": 
+    {
+      "prompt": "Depilacion"
+    }
+}
+
+### GET
+GET http://localhost:8080/api/
