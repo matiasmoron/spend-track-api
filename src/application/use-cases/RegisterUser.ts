@@ -1,6 +1,6 @@
-import { User } from '../../domain/entities/User';
-import { UserRepository } from '../../domain/repositories/UserRepository';
-import { AuthService } from '../../infrastructure/database/services/AuthService';
+import { User } from '@/domain/entities/User';
+import { UserRepository } from '@/domain/repositories/UserRepository';
+import { AuthService } from '@/infrastructure/database/services/AuthService';
 
 interface RegisterUserInput {
   name: string;

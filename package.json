@@ -1,11 +1,11 @@
 {
-  "name": "cooking-recipes-api",
+  "name": "send-track-api",
   "version": "1.0.0",
-  "description": "API para ver y compartir tus recetas con el mundo",
+  "description": "API to track all your expenses efficiently and effectively.",
   "main": "index.ts",
   "scripts": {
     "start": "ts-node src/index.ts",
-   "dev": "ts-node-dev --respawn -r tsconfig-paths/register src/index.ts",
+    "dev": "ts-node-dev --respawn -r tsconfig-paths/register src/index.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .ts",
@@ -14,23 +14,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://matiasmorons@github.com/matiasmoron/cooking-recipes-api.git"
+    "url": "git+https://matiasmorons@github.com/matiasmoron/send-track-api.git"
   },
   "author": "Matías Morón",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/matiasmoron/cooking-recipes-api/issues"
+    "url": "https://github.com/matiasmoron/send-track-api/issues"
   },
-  "homepage": "https://github.com/matiasmoron/cooking-recipes-api#readme",
+  "homepage": "https://github.com/matiasmoron/send-track-api#readme",
   "dependencies": {
     "bcrypt": "5.1.1",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.1",
+    "cors": "2.8.5",
     "dotenv": "16.4.7",
     "express": "4.21.2",
     "jsonwebtoken": "9.0.2",
     "mysql2": "3.14.0",
-    "openai": "^4.91.1",
+    "openai": "4.91.1",
     "reflect-metadata": "0.2.2",
     "typeorm": "0.3.21"
   },
@@ -51,7 +52,7 @@
     "prettier": "3.5.3",
     "ts-node": "10.9.2",
     "ts-node-dev": "2.0.0",
-    "tsconfig-paths": "^4.2.0",
+    "tsconfig-paths": "4.2.0",
     "typescript": "5.8.2",
     "typescript-eslint": "8.28.0"
   }

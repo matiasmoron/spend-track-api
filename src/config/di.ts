@@ -2,6 +2,7 @@
 // and register your services, repositories, etc.
 
 import dotenv from 'dotenv';
+import OpenAI from 'openai';
 import { AppDataSource } from '@/infrastructure/database/DataSource';
 // import { UserRepoImpl } from '@/infrastructure/database/repositories/UserRepoImpl';
 import { InMemoryUserRepo } from '@/infrastructure/database/repositories/InMemoryUserRepo';
@@ -19,6 +20,10 @@ export const authService = new AuthService(jwtSecret);
 // export const userRepository = new UserRepoImpl();
 
 export const userRepository = new InMemoryUserRepo(); // ✅ usar mock temporal
+
+export const openAIClient = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 AppDataSource.initialize()
   .then(() => console.log('📦 Database connected'))

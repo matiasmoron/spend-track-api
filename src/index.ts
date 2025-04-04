@@ -1,19 +1,13 @@
 import dotenv from 'dotenv';
-import express from 'express';
-import OpenAI from 'openai';
 import userRoutes from './interfaces/http/routes/userRoutes';
+import { openAIClient } from '@/config/di';
+import { initExpress } from '@/config/express';
 
 dotenv.config();
 
-const PORT = process.env.PORT != null || 8080;
-const app = express();
+const PORT = process.env.PORT || 8080;
 
-app.disable('x-powered-by');
-app.use(express.json());
-
-const openAIClient = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const app = initExpress();
 
 app.use('/api/users', userRoutes);
 
@@ -61,6 +55,4 @@ app.post('/api/gpt', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log('Server is running');
-});
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

@@ -7,7 +7,7 @@ Content-Type: application/json
 {
   "data": 
     {
-      "prompt": "Cambio amortiguador",
+      "prompt": "Cambio amortiguador"
     }
 }
 
