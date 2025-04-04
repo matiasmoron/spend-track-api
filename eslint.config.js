@@ -24,6 +24,16 @@ module.exports = [
         project: [path.resolve(process.cwd(), 'tsconfig.json')],
         tsconfigRootDir: process.cwd(),
       },
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        __dirname: 'readonly',
+        Buffer: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+      },
     },
     plugins: {
       '@typescript-eslint': tseslint.plugin,
@@ -38,9 +48,9 @@ module.exports = [
       },
     },
     rules: {
-      quotes: [RULES.ERROR, 'single'],
+      // ...tseslint.configs.recommendedTypeChecked,
       semi: [RULES.ERROR, 'always'],
-      '@typescript-eslint/no-unused-vars': RULES.WARN,
+      quotes: [RULES.ERROR, 'single'],
       '@typescript-eslint/no-shadow': RULES.WARN,
       '@typescript-eslint/no-misused-promises': RULES.WARN,
       '@typescript-eslint/no-unnecessary-type-assertion': RULES.WARN,
@@ -51,6 +61,16 @@ module.exports = [
       '@typescript-eslint/no-for-in-array': RULES.WARN,
       '@typescript-eslint/no-unnecessary-type-arguments': RULES.WARN,
       '@typescript-eslint/no-unsafe-call': RULES.WARN,
+      '@typescript-eslint/no-unsafe-assignment': RULES.WARN,
+      '@typescript-eslint/strict-boolean-expressions': RULES.OFF,
+      'no-unused-vars': RULES.OFF,
+      '@typescript-eslint/no-unused-vars': [
+        RULES.WARN,
+        {
+          varsIgnorePattern: '^_',
+          argsIgnorePattern: '^_',
+        },
+      ],
       'import/order': [
         RULES.ERROR,
         {
@@ -61,5 +81,4 @@ module.exports = [
       ],
     },
   },
-  ...tseslint.configs.recommendedTypeChecked,
 ];

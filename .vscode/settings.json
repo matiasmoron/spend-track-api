@@ -7,6 +7,6 @@
     "source.fixAll.eslint": "always"
   },
   "eslint.validate": ["typescript"],
-  "eslint.workingDirectories": [{ "mode": "location" }],
-
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "eslint.workingDirectories": [{ "mode": "location" }]
 }
