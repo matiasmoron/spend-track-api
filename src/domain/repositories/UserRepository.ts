@@ -1,7 +1,7 @@
 import { User } from '../entities/User';
 
 export interface UserRepository {
-  save(user: User): Promise<User>;
-  getByEmail(email: string): Promise<User | null>;
-  getById(id: number): Promise<User | null>;
+  save(_user: User): Promise<User>;
+  getByEmail(_email: string): Promise<User | null>;
+  getById(_id: number): Promise<User | null>;
 }

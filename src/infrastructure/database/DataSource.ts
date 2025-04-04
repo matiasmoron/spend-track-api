@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
 import { UserModel } from './models/UserModel';

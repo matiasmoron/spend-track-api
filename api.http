@@ -1,12 +1,25 @@
+## API HTTP Client
+
+### Method to test OpenAI API
 POST http://localhost:8080/api/gpt
 Content-Type: application/json
 
 {
   "data": 
     {
-      "prompt": "Depilacion"
+      "prompt": "Cambio amortiguador",
     }
 }
 
-### GET
+### Method to create a user
+POST http://localhost:8080/api/users/register
+Content-Type: application/json
+
+{
+  "name": "Matías",
+  "email": "matias@e2xample.com",
+  "password": "supersegura123"
+}
+
+### Method to check if the API is running
 GET http://localhost:8080/api/

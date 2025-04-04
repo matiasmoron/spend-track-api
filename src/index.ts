@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import OpenAI from 'openai';
+import userRoutes from './interfaces/http/routes/userRoutes';
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ app.use(express.json());
 const openAIClient = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+app.use('/api/users', userRoutes);
 
 app.get('/api/', (_req, res) => {
   res.send('Hello, World!');

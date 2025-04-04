@@ -3,7 +3,8 @@
 
 import dotenv from 'dotenv';
 import { AppDataSource } from '@/infrastructure/database/DataSource';
-import { UserRepoImpl } from '@/infrastructure/database/repositories/UserRepoImpl';
+// import { UserRepoImpl } from '@/infrastructure/database/repositories/UserRepoImpl';
+import { InMemoryUserRepo } from '@/infrastructure/database/repositories/InMemoryUserRepo';
 import { AuthService } from '@/infrastructure/database/services/AuthService';
 
 // load environment variables from .env file
@@ -15,7 +16,9 @@ if (typeof jwtSecret !== 'string' || jwtSecret.trim() === '') {
 }
 
 export const authService = new AuthService(jwtSecret);
-export const userRepository = new UserRepoImpl();
+// export const userRepository = new UserRepoImpl();
+
+export const userRepository = new InMemoryUserRepo(); // ✅ usar mock temporal
 
 AppDataSource.initialize()
   .then(() => console.log('📦 Database connected'))
