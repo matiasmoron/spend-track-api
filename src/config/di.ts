@@ -3,10 +3,10 @@
 
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
-import { AppDataSource } from '@/infrastructure/database/DataSource';
-// import { UserRepoImpl } from '@/infrastructure/database/repositories/UserRepoImpl';
-import { InMemoryUserRepo } from '@/infrastructure/database/repositories/InMemoryUserRepo';
-import { AuthService } from '@/infrastructure/database/services/AuthService';
+import { AppDataSource } from '../infrastructure/database/DataSource';
+import { InMemoryUserRepo } from '../infrastructure/database/repositories/InMemoryUserRepo';
+// import { UserRepoImpl } from '../infrastructure/database/repositories/UserRepoImpl';
+import { AuthService } from '../infrastructure/database/services/AuthService';
 
 // load environment variables from .env file
 dotenv.config();

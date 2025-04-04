@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
+import { openAIClient } from './config/di';
+import { initExpress } from './config/express';
 import userRoutes from './interfaces/http/routes/userRoutes';
-import { openAIClient } from '@/config/di';
-import { initExpress } from '@/config/express';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 
 const app = initExpress();
 
