@@ -9,20 +9,20 @@ import {
 @Entity('users')
 export class UserModel {
   @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Column({ length: 100 })
-  name!: string;
-
-  @Column({ unique: true })
-  email!: string;
+  id: number;
 
   @Column()
-  password!: string;
+  name: string;
 
-  @CreateDateColumn()
-  createdAt!: Date;
+  @Column({ unique: true })
+  email: string;
 
-  @UpdateDateColumn()
-  updatedAt!: Date;
+  @Column()
+  password: string;
+
+  @CreateDateColumn({ name: 'createdAt' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updatedAt' })
+  updatedAt: Date;
 }

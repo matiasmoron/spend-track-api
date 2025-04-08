@@ -14,4 +14,7 @@ export const AppDataSource = new DataSource({
   entities: [UserModel],
   synchronize: true, // o false si usás migraciones
   // logging: true,
+  ssl: {
+    rejectUnauthorized: false, // Render requiere SSL pero sin verificación estricta
+  },
 });
