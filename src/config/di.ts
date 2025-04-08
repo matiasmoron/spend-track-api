@@ -1,9 +1,9 @@
 // Use this file to configure your dependency injection container
 // and register your services, repositories, etc.
 
+import './database'; // inicializa AppDataSource
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
-import { AppDataSource } from '../infrastructure/database/DataSource';
 import { UserRepoImpl } from '../infrastructure/database/repositories/UserRepoImpl';
 import { AuthService } from '../infrastructure/database/services/AuthService';
 
@@ -21,7 +21,3 @@ export const userRepository = new UserRepoImpl();
 export const openAIClient = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-AppDataSource.initialize()
-  .then(() => console.log('📦 Database connected'))
-  .catch((err) => console.error('❌ Error connecting to DB:', err));

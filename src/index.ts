@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { openAIClient } from './config/di';
+import * as DI from './config/di'; // import this to initialize the dependency injection container
 import { initExpress } from './config/express';
 import { errorHandler } from './interfaces/http/middlewares/errorHandler';
 import apiRouter from './interfaces/http/routes/apiRouter';
@@ -32,7 +32,7 @@ app.post(`${prefix}/gpt`, async (req, res) => {
   console.log({ content });
 
   try {
-    const response = await openAIClient.chat.completions.create({
+    const response = await DI.openAIClient.chat.completions.create({
       model: 'gpt-3.5-turbo-0125',
       messages: [
         {
