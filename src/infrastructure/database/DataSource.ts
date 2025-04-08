@@ -10,8 +10,9 @@ export const AppDataSource = new DataSource({
   port: Number(process.env.DB_PORT) || 3306,
   username: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'cooking_recipes',
+  database: process.env.DB_NAME || '',
   entities: [UserModel],
   synchronize: true, // ⚠️ Use only in development
   logging: false,
+  // ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : {},
 });

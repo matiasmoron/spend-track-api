@@ -1,9 +1,9 @@
 import { validate } from 'class-validator';
 import { Request, Response } from 'express';
-import { registerUser } from '../../../application/use-cases/RegisterUser';
+import { AppError } from '../../../application/errors/AppError';
+import { registerUser } from '../../../application/use-cases/user';
 import { authService, userRepository } from '../../../config/di';
 import { RegisterUserDTO } from '../../../interfaces/validators/RegisterUserDTO';
-import { AppError } from '@/application/errors/AppError';
 
 interface RegisterRequest extends Request {
   body: {

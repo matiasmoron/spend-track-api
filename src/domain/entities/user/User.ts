@@ -6,10 +6,10 @@ interface UserProps {
 }
 
 export class User {
-  public readonly id?: number;
-  public name: string;
-  public email: string;
-  public password: string;
+  readonly id?: number;
+  name: string;
+  email: string;
+  password: string;
 
   constructor(props: UserProps) {
     this.id = props.id;

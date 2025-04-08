@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import { openAIClient } from './config/di';
 import { initExpress } from './config/express';
+import { errorHandler } from './interfaces/http/middlewares/errorHandler';
 import apiRouter from './interfaces/http/routes/apiRouter';
-import { errorHandler } from '@/interfaces/http/middlewares/errorHandler';
 
 dotenv.config();
 

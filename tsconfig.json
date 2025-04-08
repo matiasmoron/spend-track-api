@@ -6,9 +6,6 @@
     "lib": ["ES2021"],
     "rootDir": "src",
     "baseUrl": "src",
-    "paths": {
-      "@/*": ["./*"]
-    },
     "outDir": "dist",
     "strict": false,
     "esModuleInterop": true,
