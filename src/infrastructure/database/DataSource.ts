@@ -5,7 +5,7 @@ import { UserModel } from './models/UserModel';
 dotenv.config();
 
 export const AppDataSource = new DataSource({
-  type: 'mariadb',
+  type: 'postgres',
   host: process.env.DB_HOST || 'localhost',
   port: Number(process.env.DB_PORT) || 3306,
   username: process.env.DB_USER || 'root',
