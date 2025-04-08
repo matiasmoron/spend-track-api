@@ -1,45 +1,28 @@
-src/
+/src
 │
-├── domain/
-│ ├── entities/
-│ │ └── User.ts // Entidad del dominio: User
-│ └── repositories/
-│ └── UserRepository.ts // Contrato del repositorio de usuarios
+├── /domain # Capa de dominio (entidades y lógica empresarial pura)
+│ ├── /entities # Entidades centrales del negocio
+│ └── /repositories # Interfaces para los repositorios (contratos)
 │
-├── application/
-│ ├── use-cases/
-│ │ └── RegisterUser.ts // Caso de uso: registro de usuario
-│ └── dto/
-│ └── UserDTO.ts // Data Transfer Object del usuario
+├── /application # Casos de uso del sistema
+│ ├── /use-cases # Casos de uso orquestan entidades y lógica
+│ └── /dto # Objetos de transferencia de datos (opcional)
 │
-├── infrastructure/
-│ ├── database/
-│ │ ├── models/
-│ │ │ └── UserModel.ts // Entidad TypeORM para usuarios
-│ │ └── repositories/
-│ │ └── UserRepoImpl.ts // Implementación del repositorio con TypeORM
-│ └── services/
-│ └── AuthService.ts // Servicio de autenticación con bcrypt y JWT
+├── /infrastructure # Implementaciones externas (DB, servicios, etc.)
+│ ├── /database
+│ │ ├── /models # Modelos de base de datos (ej: Sequelize/Mongoose)
+│ │ └── /repositories # Implementaciones de los repositorios
+│ └── /services # Servicios externos (APIs, colas, etc.)
 │
-├── interfaces/
-│ ├── http/
-│ │ ├── controllers/
-│ │ │ └── UserController.ts // Controlador HTTP de usuarios
-│ │ ├── routes/
-│ │ │ └── userRoutes.ts // Rutas relacionadas a usuarios
-│ │ └── middlewares/
-│ │ ├── authMiddleware.ts // Middleware de autenticación JWT
-│ │ └── errorHandler.ts // Middleware de manejo de errores
-│ └── validators/
-│ └── userValidator.ts // Validación de entrada para registro/login
+├── /interfaces # Interfaces de entrada/salida (Express, GraphQL, etc.) - Todo lo que interactúa con el mundo exterior (HTTP, CLI, eventos, WebSocket, UI, etc.)
+│ ├── /http
+│ │ ├── /controllers # Lógica que recibe las requests y responde
+│ │ ├── /routes # Rutas Express
+│ │ └── /middlewares # Middlewares (auth, error handling, etc.)
+│ └── /validators # Validaciones de entrada
 │
-├── config/
-│ ├── db.ts // Configuración de TypeORM
-│ └── env.ts // Carga y exporta variables de entorno
+├── /config # Configuraciones de entorno, base de datos, etc.
 │
-├── shared/
-│ ├── constants.ts // Constantes globales
-│ └── utils.ts // Funciones auxiliares
+├── /shared # Código reutilizable (helpers, utils, constantes, etc.)
 │
-├── index.ts // Punto de entrada de la app (Express)
-└── tsconfig.json // Configuración TypeScript
+└── index.js # Punto de entrada principal

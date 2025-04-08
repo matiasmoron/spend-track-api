@@ -4,8 +4,7 @@
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import { AppDataSource } from '../infrastructure/database/DataSource';
-import { InMemoryUserRepo } from '../infrastructure/database/repositories/InMemoryUserRepo';
-// import { UserRepoImpl } from '../infrastructure/database/repositories/UserRepoImpl';
+import { UserRepoImpl } from '../infrastructure/database/repositories/UserRepoImpl';
 import { AuthService } from '../infrastructure/database/services/AuthService';
 
 // load environment variables from .env file
@@ -17,9 +16,7 @@ if (typeof jwtSecret !== 'string' || jwtSecret.trim() === '') {
 }
 
 export const authService = new AuthService(jwtSecret);
-// export const userRepository = new UserRepoImpl();
-
-export const userRepository = new InMemoryUserRepo(); // ✅ usar mock temporal
+export const userRepository = new UserRepoImpl();
 
 export const openAIClient = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

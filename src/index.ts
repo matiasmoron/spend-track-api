@@ -1,21 +1,20 @@
 import dotenv from 'dotenv';
 import { openAIClient } from './config/di';
 import { initExpress } from './config/express';
-import userRoutes from './interfaces/http/routes/userRoutes';
+import apiRouter from './interfaces/http/routes/apiRouter';
+import { errorHandler } from '@/interfaces/http/middlewares/errorHandler';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 8080;
 
 const app = initExpress();
 
-app.use('/api/users', userRoutes);
+const prefix = '/api';
 
-app.get('/api/', (_req, res) => {
-  res.send('Hello, World!');
-});
+app.use(`${prefix}`, apiRouter);
 
-app.post('/api/gpt', async (req, res) => {
+app.post(`${prefix}/gpt`, async (req, res) => {
   console.log({ body: req.body as string });
 
   const { data } = req.body as { data: { prompt: string } };
@@ -55,4 +54,5 @@ app.post('/api/gpt', async (req, res) => {
   }
 });
 
+app.use(errorHandler);
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { registerUser } from '../../../application/use-cases/RegisterUser';
 import { authService, userRepository } from '../../../config/di';
 import { RegisterUserDTO } from '../../../interfaces/validators/RegisterUserDTO';
+import { AppError } from '@/application/errors/AppError';
 
 interface RegisterRequest extends Request {
   body: {
@@ -10,10 +11,6 @@ interface RegisterRequest extends Request {
     email: string;
     password: string;
   };
-}
-
-interface AppError extends Error {
-  message: string;
 }
 
 export class UserController {
@@ -26,15 +23,17 @@ export class UserController {
     dto.password = reqPassword;
 
     const errors = await validate(dto);
-    if (errors.length) {
-      return res.status(400).json({ errors });
-    }
+    if (errors.length)
+      throw new AppError({ message: `Validation Error: ${errors.toString()}`, status: 400 });
 
     try {
       const { id, name, email } = await registerUser(userRepository, authService, dto);
       return res.status(201).json({ id, name, email });
     } catch (err) {
-      return res.status(400).json({ message: (err as AppError).message });
+      throw new AppError({
+        message: `Error registering user: ${err}`,
+        status: 500,
+      });
     }
   };
 }

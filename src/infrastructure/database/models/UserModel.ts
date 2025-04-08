@@ -18,7 +18,7 @@ export class UserModel {
   email!: string;
 
   @Column()
-  passwordHash!: string;
+  password!: string;
 
   @CreateDateColumn()
   createdAt!: Date;

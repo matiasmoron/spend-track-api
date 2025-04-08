@@ -15,14 +15,14 @@ export class UserRepoImpl implements UserRepository {
     const savedUser = await this.ormRepo.save({
       name: user.name,
       email: user.email,
-      passwordHash: user.passwordHash,
+      password: user.password,
     });
 
     return new User({
       id: savedUser.id,
       name: savedUser.name,
       email: savedUser.email,
-      passwordHash: savedUser.passwordHash,
+      password: savedUser.password,
     });
   }
 
@@ -34,7 +34,7 @@ export class UserRepoImpl implements UserRepository {
       id: user.id,
       name: user.name,
       email: user.email,
-      passwordHash: user.passwordHash,
+      password: user.password,
     });
   }
 
@@ -46,7 +46,7 @@ export class UserRepoImpl implements UserRepository {
       id: user.id,
       name: user.name,
       email: user.email,
-      passwordHash: user.passwordHash,
+      password: user.password,
     });
   }
 }
