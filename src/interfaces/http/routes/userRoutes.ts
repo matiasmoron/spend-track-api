@@ -12,4 +12,12 @@ router.post('/register', async (req: Request, res: Response, next: NextFunction)
   }
 });
 
+router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await userController.login(req, res);
+  } catch (error: unknown) {
+    next(error);
+  }
+});
+
 export default router;
