@@ -1,5 +1,5 @@
 import { User } from '../../../domain/entities/user/User';
-import { UserRepository } from '../../../domain/repositories/UserRepository';
+import { UserRepository } from '../../../domain/repositories/user/UserRepository';
 import { AuthService } from '../../../infrastructure/database/services/AuthService';
 import { AppError } from '../../errors/AppError';
 
@@ -16,10 +16,7 @@ export async function registerUser(
 ): Promise<User> {
   const existingUser = await userRepository.getByEmail(data.email);
   if (existingUser) {
-    throw new AppError({
-      message: 'Email is already in use',
-      status: 409,
-    });
+    throw new AppError('Email is already in use', 409);
   }
 
   const passwordHash = await authService.hashPassword(data.password);
