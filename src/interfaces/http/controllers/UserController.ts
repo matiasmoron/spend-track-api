@@ -1,12 +1,9 @@
-import { validate } from 'class-validator';
-import { red } from 'colorette';
-import { Request, Response } from 'express';
-import { AppValidationError, AppError } from '../../../application/errors';
+import { NextFunction, Request, Response } from 'express';
 import { loginUser, registerUser } from '../../../application/use-cases/user';
 import { authService, userRepository } from '../../../config/di';
 import { LoginDTO, RegisterUserDTO } from '../../validators/user';
 import { BaseResponse } from '../utils/BaseResponse';
-import { plainToInstance } from '../utils/plainToInstance';
+import { validateDTO } from '../utils/validateDTO';
 
 interface RegisterRequest extends Request {
   body: {
@@ -17,29 +14,29 @@ interface RegisterRequest extends Request {
 }
 
 export class UserController {
-  register: (_req: RegisterRequest, _res: Response) => Promise<Response> = async (req, res) => {
-    const dto = plainToInstance(RegisterUserDTO, req.body);
-    const errors = await validate(dto);
-    if (errors.length) throw new AppValidationError(errors);
+  register: (_req: RegisterRequest, _res: Response, next: NextFunction) => Promise<Response> =
+    async (req, res, next) => {
+      const dto = await validateDTO(RegisterUserDTO, req.body);
 
-    try {
-      const result = await registerUser(userRepository, authService, dto);
-      return BaseResponse.success(res, result);
-    } catch (err) {
-      throw new AppError(`Error registering user: ${err}`);
-    }
-  };
+      try {
+        const result = await registerUser(userRepository, authService, dto);
+        return BaseResponse.success(res, result);
+      } catch (error) {
+        next(error);
+      }
+    };
 
-  login: (_req: Request, _res: Response) => Promise<Response> = async (req, res) => {
-    const dto = plainToInstance(LoginDTO, req.body);
-    const errors = await validate(dto);
-    if (errors.length) throw new AppValidationError(errors);
-
+  login: (_req: RegisterRequest, _res: Response, next: NextFunction) => Promise<Response> = async (
+    req,
+    res,
+    next
+  ) => {
+    const dto = await validateDTO(LoginDTO, req.body);
     try {
       const result = await loginUser(userRepository, authService, dto);
       return BaseResponse.success(res, result);
     } catch (error) {
-      throw new AppError(`Error logging in: ${error}`, 500);
+      next(error);
     }
   };
 }

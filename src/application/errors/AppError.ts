@@ -13,10 +13,13 @@ export class AppError extends Error {
 
   private static mapStatusToType(statusCode: number): string {
     if (statusCode >= 500) return 'INTERNAL_SERVER_ERROR';
+    if (statusCode === 422) return 'UNPROCESSABLE_ENTITY';
+    if (statusCode === 409) return 'CONFLICT';
     if (statusCode === 404) return 'NOT_FOUND';
     if (statusCode === 401) return 'UNAUTHORIZED';
     if (statusCode === 403) return 'FORBIDDEN';
     if (statusCode === 400) return 'BAD_REQUEST';
+
     return 'UNKNOWN_ERROR';
   }
 }

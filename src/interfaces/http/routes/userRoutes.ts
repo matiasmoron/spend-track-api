@@ -6,7 +6,7 @@ const userController = new UserController();
 
 router.post('/register', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await userController.register(req, res);
+    await userController.register(req, res, next);
   } catch (error: unknown) {
     next(error);
   }
@@ -14,7 +14,7 @@ router.post('/register', async (req: Request, res: Response, next: NextFunction)
 
 router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await userController.login(req, res);
+    await userController.login(req, res, next);
   } catch (error: unknown) {
     next(error);
   }

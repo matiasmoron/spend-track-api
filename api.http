@@ -16,8 +16,16 @@ POST http://localhost:8080/api/users/register
 Content-Type: application/json
 
 {
-  "name": "Matías",
-  "email": "matias@e2xample.com",
+  "email": "ricardo5@gmail.com",
+  "password": "supersegura123"
+}
+
+### Method to log a user
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+
+{
+  "email": "ricardo5@gmail.com",
   "password": "supersegura123"
 }
 
