@@ -1,37 +1,22 @@
 export class AppError extends Error {
-  status: number;
+  public readonly type: string;
+  public readonly statusCode: number;
+  public readonly details?: Record<string, unknown>;
 
-  constructor(
-    {
-      message,
-      status = 500,
-    }: {
-      message?: string;
-      status?: number;
-    } = {
-      status: 500,
-    }
-  ) {
-    super(message || AppError.getErrorMessage(status));
-    this.status = status;
+  constructor(message: string, statusCode = 400, type?: string, details?: Record<string, unknown>) {
+    super(message);
+    this.statusCode = statusCode;
+    this.type = type ?? AppError.mapStatusToType(statusCode);
+    this.details = details;
+    Object.setPrototypeOf(this, AppError.prototype);
   }
 
-  private static getErrorMessage(status: number = 500): string {
-    switch (status) {
-      case 400:
-        return 'Bad request';
-      case 401:
-        return 'Unauthorized';
-      case 403:
-        return 'Forbidden';
-      case 404:
-        return 'Not found';
-      case 409:
-        return 'Conflict';
-      case 500:
-        return 'Internal server error';
-      default:
-        return 'Internal server error';
-    }
+  private static mapStatusToType(statusCode: number): string {
+    if (statusCode >= 500) return 'INTERNAL_SERVER_ERROR';
+    if (statusCode === 404) return 'NOT_FOUND';
+    if (statusCode === 401) return 'UNAUTHORIZED';
+    if (statusCode === 403) return 'FORBIDDEN';
+    if (statusCode === 400) return 'BAD_REQUEST';
+    return 'UNKNOWN_ERROR';
   }
 }
