@@ -71,6 +71,7 @@ module.exports = [
           argsIgnorePattern: '^_',
         },
       ],
+      'import/no-cycle': [RULES.ERROR, { maxDepth: Infinity }],
       'import/order': [
         RULES.ERROR,
         {
