@@ -1,9 +1,12 @@
 import { validate } from 'class-validator';
+import { red } from 'colorette';
 import { Request, Response } from 'express';
-import { AppError } from '../../../application/errors/AppError';
-import { registerUser } from '../../../application/use-cases/user';
+import { AppValidationError, AppError } from '../../../application/errors';
+import { loginUser, registerUser } from '../../../application/use-cases/user';
 import { authService, userRepository } from '../../../config/di';
-import { RegisterUserDTO } from '../../../interfaces/validators/RegisterUserDTO';
+import { LoginDTO, RegisterUserDTO } from '../../validators/user';
+import { BaseResponse } from '../utils/BaseResponse';
+import { plainToInstance } from '../utils/plainToInstance';
 
 interface RegisterRequest extends Request {
   body: {
@@ -15,25 +18,28 @@ interface RegisterRequest extends Request {
 
 export class UserController {
   register: (_req: RegisterRequest, _res: Response) => Promise<Response> = async (req, res) => {
-    const dto = new RegisterUserDTO();
-    const { name: reqName, email: reqEmail, password: reqPassword } = req.body;
-
-    dto.name = reqName;
-    dto.email = reqEmail;
-    dto.password = reqPassword;
-
+    const dto = plainToInstance(RegisterUserDTO, req.body);
     const errors = await validate(dto);
-    if (errors.length)
-      throw new AppError({ message: `Validation Error: ${errors.toString()}`, status: 400 });
+    if (errors.length) throw new AppValidationError(errors);
 
     try {
-      const { id, name, email } = await registerUser(userRepository, authService, dto);
-      return res.status(201).json({ id, name, email });
+      const result = await registerUser(userRepository, authService, dto);
+      return BaseResponse.success(res, result);
     } catch (err) {
-      throw new AppError({
-        message: `Error registering user: ${err}`,
-        status: 500,
-      });
+      throw new AppError(`Error registering user: ${err}`);
+    }
+  };
+
+  login: (_req: Request, _res: Response) => Promise<Response> = async (req, res) => {
+    const dto = plainToInstance(LoginDTO, req.body);
+    const errors = await validate(dto);
+    if (errors.length) throw new AppValidationError(errors);
+
+    try {
+      const result = await loginUser(userRepository, authService, dto);
+      return BaseResponse.success(res, result);
+    } catch (error) {
+      throw new AppError(`Error logging in: ${error}`, 500);
     }
   };
 }

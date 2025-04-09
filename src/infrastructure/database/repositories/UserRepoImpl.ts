@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { User } from '../../../domain/entities/user/User';
-import { UserRepository } from '../../../domain/repositories/UserRepository';
+import { UserRepository } from '../../../domain/repositories/user/UserRepository';
 import { AppDataSource } from '../DataSource';
 import { UserModel } from '../models/UserModel';
 
