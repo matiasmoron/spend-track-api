@@ -4,13 +4,13 @@ import { GroupRepository } from '../../../domain/repositories/group/GroupReposit
 import { GroupModel } from '../../../infrastructure/database/models/GroupModel';
 import { UserGroupModel } from '../../../infrastructure/database/models/UserGroupModel';
 
-interface GroupInput {
+interface CreateGroupInput {
   name: string;
   type: GroupType;
   createdBy: number;
 }
 
-interface GroupOutput {
+interface CreateGroupOutput {
   id: number;
   name: string;
   type: GroupType;
@@ -20,8 +20,8 @@ interface GroupOutput {
 export async function createGroup(
   groupRepository: GroupRepository,
   userGroupRepository: UserGroupRepository,
-  data: GroupInput
-): Promise<GroupOutput> {
+  data: CreateGroupInput
+): Promise<CreateGroupOutput> {
   const { name, type, createdBy } = data;
 
   const group = new GroupModel();

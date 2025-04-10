@@ -1,5 +1,6 @@
 import { NextFunction, Response } from 'express';
 import { createGroup } from '../../../application/use-cases/group/CreateGroup';
+import { getGroupsByUser } from '../../../application/use-cases/group/GetGroupsByUser';
 import { groupRepository, userGroupRepository } from '../../../config/di';
 import { CreateGroupDTO } from '../../../interfaces/validators/group';
 import { AuthenticatedRequest } from '../types/AuthenticatedRequest';
@@ -20,7 +21,16 @@ export class GroupController {
       const result = await createGroup(groupRepository, userGroupRepository, groupInput);
 
       BaseResponse.success(res, result, 201);
-      return;
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getByUser(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { id: userId } = req.user;
+      const result = await getGroupsByUser({ userId }, groupRepository);
+      BaseResponse.success(res, result);
     } catch (error) {
       next(error);
     }

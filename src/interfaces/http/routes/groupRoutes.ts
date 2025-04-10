@@ -6,5 +6,6 @@ const groupController = new GroupController();
 const groupRouter = Router();
 
 groupRouter.post('/create', authenticateJWT, groupController.create.bind(groupController));
+groupRouter.get('/', authenticateJWT, groupController.getByUser.bind(groupController));
 
 export default groupRouter;
