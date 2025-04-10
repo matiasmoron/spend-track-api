@@ -13,8 +13,16 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
       },
       err.statusCode
     );
+  } else if (err instanceof Error && err.message === 'INVALID_JSON') {
+    return BaseResponse.error(
+      res,
+      {
+        message: 'Invalid JSON body format',
+        type: 'BAD_REQUEST',
+      },
+      400
+    );
   } else {
-    console.error('Unexpected error - NO DEBERIA ENTRAR ACA:', err);
     // fallback para errores inesperados
     BaseResponse.error(
       res,

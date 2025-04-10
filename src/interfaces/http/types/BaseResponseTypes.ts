@@ -1,7 +1,6 @@
 export interface SuccessResponse<T> {
   success: true;
   data: T;
-  error: null;
 }
 
 export interface ErrorResponse {

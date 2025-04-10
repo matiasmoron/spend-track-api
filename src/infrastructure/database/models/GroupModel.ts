@@ -5,20 +5,18 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { GroupType } from '../../../domain/entities/group';
 
-@Entity('users')
-export class UserModel {
+@Entity('groups')
+export class GroupModel {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column({ unique: true })
-  email: string;
-
-  @Column()
-  password: string;
+  @Column({ type: 'enum', enum: ['trip', 'house', 'couple', 'other'] })
+  type: GroupType;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

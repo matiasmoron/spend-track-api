@@ -6,7 +6,7 @@ import apiRouter from './interfaces/http/routes/apiRouter';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 
 void (async () => {
   try {

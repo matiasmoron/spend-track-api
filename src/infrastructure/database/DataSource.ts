@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
+import { GroupModel } from './models/GroupModel';
+import { UserGroupModel } from './models/UserGroupModel';
 import { UserModel } from './models/UserModel';
 
 dotenv.config();
@@ -11,7 +13,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || '',
-  entities: [UserModel],
+  entities: [UserModel, GroupModel, UserGroupModel],
   synchronize: true, // o false si usás migraciones
   // logging: true,
   ssl: {

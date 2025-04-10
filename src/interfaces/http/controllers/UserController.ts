@@ -14,19 +14,23 @@ interface RegisterRequest extends Request {
 }
 
 export class UserController {
-  register: (_req: RegisterRequest, _res: Response, next: NextFunction) => Promise<Response> =
-    async (req, res, next) => {
-      const dto = await validateDTO(RegisterUserDTO, req.body);
+  register: (_req: RegisterRequest, _res: Response, next: NextFunction) => Promise<void> = async (
+    req,
+    res,
+    next
+  ) => {
+    const dto = await validateDTO(RegisterUserDTO, req.body);
 
-      try {
-        const result = await registerUser(userRepository, authService, dto);
-        return BaseResponse.success(res, result);
-      } catch (error) {
-        next(error);
-      }
-    };
+    try {
+      const result = await registerUser(userRepository, authService, dto);
+      BaseResponse.success(res, result);
+      return;
+    } catch (error) {
+      next(error);
+    }
+  };
 
-  login: (_req: RegisterRequest, _res: Response, next: NextFunction) => Promise<Response> = async (
+  login: (_req: RegisterRequest, _res: Response, next: NextFunction) => Promise<void> = async (
     req,
     res,
     next
@@ -34,7 +38,8 @@ export class UserController {
     const dto = await validateDTO(LoginDTO, req.body);
     try {
       const result = await loginUser(userRepository, authService, dto);
-      return BaseResponse.success(res, result);
+      BaseResponse.success(res, result);
+      return;
     } catch (error) {
       next(error);
     }

@@ -1,20 +1,16 @@
+import { UserProps } from '../../../domain/entities/user';
 import { UserRepository } from '../../../domain/repositories/user/UserRepository';
 import { AuthService } from '../../../infrastructure/database/services/AuthService';
 import { AppError } from '../../errors/AppError';
 
-interface LoginInput {
-  email: string;
-  password: string;
-}
+type LoginInput = Pick<UserProps, 'email' | 'password'>;
 
-interface LoginOutput {
-  user: {
-    id: number;
-    name: string;
-    email: string;
-  };
+type LoginOutput = {
+  user: Pick<UserProps, 'id' | 'name' | 'email'>;
   token: string;
-}
+};
+
+const EXPIRATION_TIME = '7D';
 
 export async function loginUser(
   userRepository: UserRepository,
@@ -33,7 +29,7 @@ export async function loginUser(
     throw new AppError('Invalid credentials', 401);
   }
 
-  const token = authService.generateToken({ id: user.id }, '7D');
+  const token = authService.generateToken({ id: user.id, email: user.email }, EXPIRATION_TIME);
 
   return {
     user: {

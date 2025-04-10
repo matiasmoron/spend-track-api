@@ -14,7 +14,8 @@
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "typeRoots": ["./node_modules/@types", "./src/types", "./src/types/express"]
     // "noUnusedLocals": true,
     // "noUnusedParameters": true
   },
