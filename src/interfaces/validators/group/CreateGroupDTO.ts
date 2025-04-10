@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsIn } from 'class-validator';
+import { IsNotEmpty, IsString, IsEnum } from 'class-validator';
 import { GroupType } from '../../../domain/entities/group';
 
 export class CreateGroupDTO {
@@ -7,6 +7,8 @@ export class CreateGroupDTO {
   name!: string;
 
   @IsNotEmpty({ message: 'Group type is required' })
-  @IsIn(['trip', 'home', 'couple', 'other'], { message: 'Invalid group type' })
+  @IsEnum(GroupType, {
+    message: `Group type must be one of: ${Object.values(GroupType).join(', ')}`,
+  })
   type!: GroupType;
 }
