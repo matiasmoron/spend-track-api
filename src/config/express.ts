@@ -9,6 +9,25 @@ const app = express();
 
 export function initExpress(): Express {
   app.disable('x-powered-by');
+
+  app.use(
+    cors({
+      origin: (
+        origin: string | undefined,
+        callback: (err: Error | null, allow?: boolean) => void
+      ) => {
+        if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    })
+  );
+
+  app.options('*', cors());
+
   app.use(
     express.json({
       strict: true,
@@ -34,22 +53,6 @@ export function initExpress(): Express {
     }
     next();
   });
-
-  app.use(
-    cors({
-      origin: (
-        origin: string | undefined,
-        callback: (err: Error | null, allow?: boolean) => void
-      ) => {
-        if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'));
-        }
-      },
-      methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    })
-  );
 
   return app;
 }
