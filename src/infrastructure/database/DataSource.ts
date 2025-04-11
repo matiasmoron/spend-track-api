@@ -6,17 +6,28 @@ import { UserModel } from './models/UserModel';
 
 dotenv.config();
 
-export const AppDataSource = new DataSource({
-  type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: Number(process.env.DB_PORT) || 3306,
-  username: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || '',
-  entities: [UserModel, GroupModel, UserGroupModel],
-  synchronize: true, // o false si usás migraciones
-  // logging: true,
-  ssl: {
-    rejectUnauthorized: false, // Render requiere SSL pero sin verificación estricta
-  },
-});
+class Database {
+  private static _instance: DataSource;
+
+  static getInstance(): DataSource {
+    if (!Database._instance) {
+      Database._instance = new DataSource({
+        type: 'postgres',
+        host: process.env.DB_HOST || 'localhost',
+        port: Number(process.env.DB_PORT) || 3306,
+        username: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME || '',
+        entities: [UserModel, GroupModel, UserGroupModel],
+        synchronize: true, // o false si usás migraciones
+        ssl: {
+          rejectUnauthorized: false, // Render requiere SSL pero sin verificación estricta
+        },
+      });
+    }
+
+    return Database._instance;
+  }
+}
+
+export const AppDataSource = Database.getInstance();

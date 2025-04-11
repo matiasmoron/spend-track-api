@@ -5,7 +5,7 @@ import { AppError } from '../../errors/AppError';
 
 type LoginInput = Pick<UserProps, 'email' | 'password'>;
 
-type LoginOutput = {
+export type LoginOutput = {
   user: Pick<UserProps, 'id' | 'name' | 'email'>;
   token: string;
 };

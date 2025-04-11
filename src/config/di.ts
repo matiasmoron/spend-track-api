@@ -28,7 +28,7 @@ const initInstances = () => {
   userGroupRepository = new UserGroupRepoImpl();
 };
 
-// Initialize the database connection
+// Initialize the instances and the database
 export const initDI = async () => {
   await initDB();
 

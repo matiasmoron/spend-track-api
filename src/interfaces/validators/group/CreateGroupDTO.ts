@@ -1,8 +1,9 @@
-import { IsNotEmpty, IsString, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsString, IsEnum, Matches } from 'class-validator';
 import { GroupType } from '../../../domain/entities/group';
 
 export class CreateGroupDTO {
   @IsNotEmpty({ message: 'Group name is required' })
+  @Matches(/^(?!\s*$).+/, { message: 'Group name cannot be empty or only spaces' })
   @IsString({ message: 'Group name must be a string' })
   name!: string;
 

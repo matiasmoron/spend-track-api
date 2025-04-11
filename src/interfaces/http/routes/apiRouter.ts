@@ -9,4 +9,6 @@ apiRouter.use('/health', healthRouter);
 apiRouter.use('/users', userRoutes);
 apiRouter.use('/groups', groupRoutes);
 
+export const apiRouterPrefix = '/api';
+
 export default apiRouter;

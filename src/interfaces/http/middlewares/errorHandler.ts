@@ -23,6 +23,8 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
       400
     );
   } else {
+    console.log('ERRORRRR', { err });
+
     // fallback para errores inesperados
     BaseResponse.error(
       res,
