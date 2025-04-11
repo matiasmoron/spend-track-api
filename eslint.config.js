@@ -42,7 +42,7 @@ module.exports = [
     settings: {
       'import/resolver': {
         node: {
-          paths: ['src'],
+          paths: ['src', 'tests'],
           extensions: ['.js', '.ts'],
         },
       },
@@ -80,6 +80,21 @@ module.exports = [
           'newlines-between': 'never',
         },
       ],
+    },
+  },
+  {
+    files: ['**/*.test.ts'],
+    languageOptions: {
+      globals: {
+        jest: 'readonly',
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        beforeAll: 'readonly',
+        afterEach: 'readonly',
+        afterAll: 'readonly',
+      },
     },
   },
 ];

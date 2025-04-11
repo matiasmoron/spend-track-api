@@ -4,7 +4,7 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "lib": ["ES2021"],
-    "rootDir": "src",
+    "rootDir": ".",
     "baseUrl": "src",
     "outDir": "dist",
     "strict": false,
@@ -15,10 +15,11 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strictNullChecks": false,
-    "typeRoots": ["./node_modules/@types", "./src/types", "./src/types/express"]
+    "typeRoots": ["./node_modules/@types", "./src/types", "./src/types/express"],
+    "types": ["jest", "node"]
     // "noUnusedLocals": true,
     // "noUnusedParameters": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts", "jest.config.ts"],
   "exclude": ["node_modules", "dist"]
 }
