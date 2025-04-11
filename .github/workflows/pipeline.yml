@@ -1,61 +1,100 @@
-name: Deployment Pipeline
+name: CI Pipeline
 
 on:
   push:
-    branches:
-      - '**'
+    branches: [develop]
   pull_request:
-    branches:
-      - '**'
-    types: [opened, synchronize]
+    branches: [main]
+    types: [opened, synchronize, reopened]
 
 jobs:
-  avoid_redundancy:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Cancel Previous Redundant Builds
-        uses: styfle/cancel-workflow-action@0.9.1
-        with:
-          access_token: ${{ github.token }}
-
   lint:
-    runs-on: ubuntu-20.04
+    name: 🧹 Lint & Format
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
+          node-version: 20
+          cache: 'yarn'
+      - name: Cache node_modules
+        uses: actions/cache@v3
         with:
-          node-version: '14.x'
-      - name: Install dependencies
-        run: yarn install --no-audit --no-fund --no-optional
-      - name: Lint
-        run: yarn run eslint
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: yarn install --frozen-lockfile
+      - run: yarn lint
+      - run: yarn format --check
 
-  prettier:
-    runs-on: ubuntu-20.04
+  test-unit:
+    name: 🧪 Unit Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      fail-fast: true
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
+          node-version: 20
+          cache: 'yarn'
+      - name: Cache node_modules
+        uses: actions/cache@v3
         with:
-          node-version: '14.x'
-      - name: Install dependencies
-        run: yarn install --no-audit --no-fund --no-optional
-      - name: Prettier
-        run: yarn run prettier
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: yarn install --frozen-lockfile
+      - run: yarn test:unit
+
+  test-integration:
+    name: 🔁 Integration Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      fail-fast: true
+    env:
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: yarn install --frozen-lockfile
+      - run: yarn test:integration --detectOpenHandles
 
   build:
-    runs-on: ubuntu-20.04
+    name: 🔧 Build
+    runs-on: ubuntu-latest
+    needs: [test-unit, test-integration]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
+          node-version: 20
+          cache: 'yarn'
+      - name: Cache node_modules
+        uses: actions/cache@v3
         with:
-          node-version: '14.x'
-      - name: Install dependencies
-        run: yarn install --no-audit --no-fund --no-optional
-      - name: Build
-        run: yarn run build
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
