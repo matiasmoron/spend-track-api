@@ -11,6 +11,7 @@ export function initExpress(): Express {
   app.disable('x-powered-by');
 
   app.use(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     cors({
       origin: (
         origin: string | undefined,
@@ -26,6 +27,7 @@ export function initExpress(): Express {
     })
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   app.options('*', cors());
 
   app.use(

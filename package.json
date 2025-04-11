@@ -9,7 +9,7 @@
     "build": "tsc",
     "test": "tsc --project tsconfig.test.json --noEmit && jest",
     "test:unit": "jest tests/unit --passWithNoTests",
-    "test:integration": "jest tests/integration --detectOpenHandles",
+    "test:integration": "jest tests/integration --verbose --detectOpenHandles",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write ."
