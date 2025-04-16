@@ -1,3 +1,3 @@
 export * from './Group';
-export * from './GroupType';
+export * from '../../value-objects';
 export * from './UserGroup';
