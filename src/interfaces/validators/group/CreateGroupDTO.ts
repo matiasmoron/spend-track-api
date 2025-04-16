@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, IsEnum, Matches, MaxLength } from 'class-validator';
-import { GroupType } from '../../../domain/entities/group';
+import { GroupType } from '../../../domain/value-objects';
 
 export class CreateGroupDTO {
   @IsNotEmpty({ message: 'Group name is required' })

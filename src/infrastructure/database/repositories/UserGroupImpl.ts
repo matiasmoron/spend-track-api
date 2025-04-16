@@ -23,4 +23,22 @@ export class UserGroupRepoImpl implements UserGroupRepository {
   async findByGroupId(groupId: number): Promise<UserGroup[]> {
     return await this.repository.findBy({ groupId });
   }
+
+  async addUserToGroup(userId: number, groupId: number): Promise<void> {
+    const repo = AppDataSource.getRepository(UserGroupModel);
+    const entry = repo.create({ userId, groupId });
+    await repo.save(entry);
+  }
+
+  async getUserGroups(userId: number): Promise<number[]> {
+    const repo = AppDataSource.getRepository(UserGroupModel);
+    const results = await repo.find({ where: { userId } });
+    return results.map((r) => r.groupId);
+  }
+
+  async isUserInGroup(userId: number, groupId: number): Promise<boolean> {
+    const repo = AppDataSource.getRepository(UserGroupModel);
+    const count = await repo.count({ where: { userId, groupId } });
+    return count > 0;
+  }
 }

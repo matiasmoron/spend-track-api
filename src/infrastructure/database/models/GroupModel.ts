@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { GroupType } from '../../../domain/entities/group';
+import { GroupType } from '../../../domain/value-objects';
 
 @Entity('groups')
 export class GroupModel {
@@ -15,7 +15,7 @@ export class GroupModel {
   @Column()
   name: string;
 
-  @Column({ type: 'enum', enum: ['trip', 'house', 'couple', 'other'] })
+  @Column({ type: 'enum', enum: GroupType })
   type: GroupType;
 
   @CreateDateColumn({ name: 'created_at' })

@@ -1,7 +1,7 @@
 import { createGroup } from '../../../../../src/application/use-cases/group/CreateGroup';
-import { GroupType } from '../../../../../src/domain/entities/group/GroupType';
 import { GroupRepository } from '../../../../../src/domain/repositories/group/GroupRepository';
 import { UserGroupRepository } from '../../../../../src/domain/repositories/group/UserGroupRepository';
+import { GroupType } from '../../../../../src/domain/value-objects';
 
 const mockGroupRepository: jest.Mocked<GroupRepository> = {
   save: jest.fn(),
@@ -10,9 +10,12 @@ const mockGroupRepository: jest.Mocked<GroupRepository> = {
 };
 
 const mockUserGroupRepository: jest.Mocked<UserGroupRepository> = {
-  save: jest.fn(),
-  findByUserId: jest.fn(),
+  addUserToGroup: jest.fn(),
   findByGroupId: jest.fn(),
+  findByUserId: jest.fn(),
+  getUserGroups: jest.fn(),
+  isUserInGroup: jest.fn(),
+  save: jest.fn(),
 };
 
 describe('createGroup', () => {

@@ -1,6 +1,6 @@
 import { UserGroupRepository } from 'domain/repositories/group/UserGroupRepository';
-import { GroupType } from '../../../domain/entities/group/GroupType';
 import { GroupRepository } from '../../../domain/repositories/group/GroupRepository';
+import { GroupType } from '../../../domain/value-objects';
 import { GroupModel } from '../../../infrastructure/database/models/GroupModel';
 import { UserGroupModel } from '../../../infrastructure/database/models/UserGroupModel';
 

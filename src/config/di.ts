@@ -2,7 +2,9 @@
 // and register your services, repositories, etc.
 
 import dotenv from 'dotenv';
+import { ExpenseRepositoryImpl } from '../infrastructure/database/repositories/ExpenseRepositoryImpl';
 import { GroupRepoImpl } from '../infrastructure/database/repositories/GroupRepoImpl';
+import { InvitationRepositoryImpl } from '../infrastructure/database/repositories/InvitationRepositoryImpl';
 import { UserGroupRepoImpl } from '../infrastructure/database/repositories/UserGroupImpl';
 import { UserRepoImpl } from '../infrastructure/database/repositories/UserRepoImpl';
 import { AuthService } from '../infrastructure/database/services/AuthService';
@@ -17,15 +19,19 @@ if (typeof jwtSecret !== 'string' || jwtSecret.trim() === '') {
 }
 
 export let authService: AuthService;
-export let userRepository: UserRepoImpl;
+export let expenseRepository: ExpenseRepositoryImpl;
 export let groupRepository: GroupRepoImpl;
+export let invitationRepository: InvitationRepositoryImpl;
 export let userGroupRepository: UserGroupRepoImpl;
+export let userRepository: UserRepoImpl;
 
 const initInstances = () => {
   authService = new AuthService(jwtSecret);
-  userRepository = new UserRepoImpl();
+  expenseRepository = new ExpenseRepositoryImpl();
   groupRepository = new GroupRepoImpl();
+  invitationRepository = new InvitationRepositoryImpl();
   userGroupRepository = new UserGroupRepoImpl();
+  userRepository = new UserRepoImpl();
 };
 
 // Initialize the instances and the database
