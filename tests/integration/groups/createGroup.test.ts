@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 import request from 'supertest';
 import app from '../../../src/app';
 import { ERROR_VALIDATION_MESSAGE, ERROR_VALIDATION_TYPE } from '../../../src/application/errors';
-import { GroupType } from '../../../src/domain/entities/group';
+import { GroupType } from '../../../src/domain/value-objects';
 import { AppDataSource } from '../../../src/infrastructure/database/DataSource';
 import { UserModel } from '../../../src/infrastructure/database/models/UserModel';
 import { TestEnvironment } from '../shared/testEnvironment';

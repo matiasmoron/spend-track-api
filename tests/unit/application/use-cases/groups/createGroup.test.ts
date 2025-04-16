@@ -1,7 +1,7 @@
 import { createGroup } from '../../../../../src/application/use-cases/group/CreateGroup';
-import { GroupType } from '../../../../../src/domain/entities/group/GroupType';
 import { GroupRepository } from '../../../../../src/domain/repositories/group/GroupRepository';
 import { UserGroupRepository } from '../../../../../src/domain/repositories/group/UserGroupRepository';
+import { GroupType } from '../../../../../src/domain/value-objects';
 
 const mockGroupRepository: jest.Mocked<GroupRepository> = {
   save: jest.fn(),
