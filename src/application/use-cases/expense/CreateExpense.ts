@@ -3,8 +3,6 @@ import { Expense } from '../../../domain/entities/expense/Expense';
 import { ExpenseParticipant } from '../../../domain/entities/expense/ExpenseParticipant';
 import { ExpenseRepository } from '../../../domain/repositories/expense/ExpenseRepository';
 import { Currency } from '../../../domain/value-objects/Currency';
-import { log } from '../../../shared/utils';
-
 export interface CreateExpenseInput {
   groupId: number;
   description: string;
@@ -59,8 +57,6 @@ export async function createExpense(
         })
     ),
   ];
-
-  log.info(expense);
 
   return repository.create(expense, participants);
 }
