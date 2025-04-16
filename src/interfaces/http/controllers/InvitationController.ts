@@ -1,11 +1,11 @@
 import { Response, NextFunction } from 'express';
-import { updateInvitationStatus } from 'application/use-cases/invitation/UpdateInvitationStatus';
-import { UpdateInvitationStatusDTO } from 'interfaces/validators/invitation/UpdateInvitationStatusDTO';
 import { getUserInvitations } from '../../../application/use-cases/invitation/GetUserInvitations';
 import { sendInvitation } from '../../../application/use-cases/invitation/SendInvitation';
+import { updateInvitationStatus } from '../../../application/use-cases/invitation/UpdateInvitationStatus';
 import { invitationRepository, userGroupRepository } from '../../../config/di';
 import { AuthenticatedRequest } from '../../../interfaces/http/types/AuthenticatedRequest';
 import { BaseResponse } from '../../../interfaces/http/utils/BaseResponse';
+import { UpdateInvitationStatusDTO } from '../../../interfaces/validators/invitation/UpdateInvitationStatusDTO';
 import { CreateInvitationDTO } from '../../validators/invitation/CreateInvitationDTO';
 import { validateDTO } from '../utils/validateDTO';
 

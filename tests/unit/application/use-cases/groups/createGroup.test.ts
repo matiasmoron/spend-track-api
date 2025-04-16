@@ -10,9 +10,12 @@ const mockGroupRepository: jest.Mocked<GroupRepository> = {
 };
 
 const mockUserGroupRepository: jest.Mocked<UserGroupRepository> = {
-  save: jest.fn(),
-  findByUserId: jest.fn(),
+  addUserToGroup: jest.fn(),
   findByGroupId: jest.fn(),
+  findByUserId: jest.fn(),
+  getUserGroups: jest.fn(),
+  isUserInGroup: jest.fn(),
+  save: jest.fn(),
 };
 
 describe('createGroup', () => {

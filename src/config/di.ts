@@ -2,9 +2,9 @@
 // and register your services, repositories, etc.
 
 import dotenv from 'dotenv';
-import { ExpenseRepositoryImpl } from 'infrastructure/database/repositories/ExpenseRepositoryImpl';
-import { InvitationRepositoryImpl } from 'infrastructure/database/repositories/InvitationRepositoryImpl';
+import { ExpenseRepositoryImpl } from '../infrastructure/database/repositories/ExpenseRepositoryImpl';
 import { GroupRepoImpl } from '../infrastructure/database/repositories/GroupRepoImpl';
+import { InvitationRepositoryImpl } from '../infrastructure/database/repositories/InvitationRepositoryImpl';
 import { UserGroupRepoImpl } from '../infrastructure/database/repositories/UserGroupImpl';
 import { UserRepoImpl } from '../infrastructure/database/repositories/UserRepoImpl';
 import { AuthService } from '../infrastructure/database/services/AuthService';
