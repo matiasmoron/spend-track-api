@@ -1,9 +1,8 @@
-import express from 'express';
+import { initExpress } from './config/express';
 import { errorHandler } from './interfaces/http/middlewares/errorHandler';
 import apiRouter, { apiRouterPrefix } from './interfaces/http/routes/apiRouter';
 
-const app = express();
-app.use(express.json());
+const app = initExpress();
 app.use(`${apiRouterPrefix}`, apiRouter);
 app.use(errorHandler);
 
