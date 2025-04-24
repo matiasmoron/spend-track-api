@@ -3,7 +3,10 @@ import express, { Express } from 'express';
 import { AppError } from '../application/errors';
 import { BaseResponse } from '../interfaces/http/utils/BaseResponse';
 
-const ALLOWED_ORIGINS = ['http://localhost:4200', 'https://your-production-url.com'];
+const ALLOWED_ORIGINS = [
+  'http://localhost:4200',
+  'https://expense-tracker-app-smoky-seven.vercel.app',
+];
 
 const app = express();
 
@@ -23,7 +26,7 @@ export function initExpress(): Express {
           callback(new Error('Not allowed by CORS'));
         }
       },
-      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     })
   );
 
