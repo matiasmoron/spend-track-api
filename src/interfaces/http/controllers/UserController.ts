@@ -23,7 +23,7 @@ export class UserController {
 
     try {
       const result = await registerUser(userRepository, authService, dto);
-      BaseResponse.success(res, result);
+      BaseResponse.success(res, result, 201);
       return;
     } catch (error) {
       next(error);

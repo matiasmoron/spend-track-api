@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../../../application/errors/AppError';
 import { BaseResponse } from '../utils/BaseResponse';
 
-export function errorHandler(err: unknown, req: Request, res: Response, _next: NextFunction) {
+export function errorHandler(err: unknown, _req: Request, res: Response, _next: NextFunction) {
   if (err instanceof AppError) {
     BaseResponse.error(
       res,
@@ -23,8 +23,6 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
       400
     );
   } else {
-    console.log('ERRORRRR', { err });
-
     // fallback para errores inesperados
     BaseResponse.error(
       res,

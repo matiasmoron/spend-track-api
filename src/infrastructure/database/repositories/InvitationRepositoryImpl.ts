@@ -1,3 +1,4 @@
+import { Repository } from 'typeorm';
 import { Invitation } from '../../../domain/entities/invitation/Invitation';
 import { InvitationStatus } from '../../../domain/entities/invitation/Invitation';
 import { InvitationRepository } from '../../../domain/repositories/invitation/InvitationRepository';
@@ -5,10 +6,14 @@ import { AppDataSource } from '../../../infrastructure/database/DataSource';
 import { InvitationModel } from '../../../infrastructure/database/models/InvitationModel';
 
 export class InvitationRepositoryImpl implements InvitationRepository {
-  async create(invitation: Invitation): Promise<Invitation> {
-    const repo = AppDataSource.getRepository(InvitationModel);
+  private readonly repository: Repository<InvitationModel>;
 
-    const model = repo.create({
+  constructor() {
+    this.repository = AppDataSource.getRepository(InvitationModel);
+  }
+
+  async create(invitation: Invitation): Promise<Invitation> {
+    const model = this.repository.create({
       groupId: invitation.groupId,
       invitedById: invitation.invitedById,
       invitedUserId: invitation.invitedUserId,
@@ -16,7 +21,7 @@ export class InvitationRepositoryImpl implements InvitationRepository {
       createdAt: invitation.createdAt,
     });
 
-    const saved = await repo.save(model);
+    const saved = await this.repository.save(model);
 
     return new Invitation({
       ...invitation,
@@ -25,8 +30,7 @@ export class InvitationRepositoryImpl implements InvitationRepository {
   }
 
   async findByUserId(userId: number): Promise<Invitation[]> {
-    const repo = AppDataSource.getRepository(InvitationModel);
-    const models = await repo.find({
+    const models = await this.repository.find({
       where: { invitedUserId: userId },
       order: { createdAt: 'ASC' },
     });
@@ -35,8 +39,7 @@ export class InvitationRepositoryImpl implements InvitationRepository {
   }
 
   async findByIdAndUser(id: number, userId: number): Promise<Invitation | null> {
-    const repo = AppDataSource.getRepository(InvitationModel);
-    const model = await repo.findOne({ where: { id, invitedUserId: userId } });
+    const model = await this.repository.findOne({ where: { id, invitedUserId: userId } });
     return model ? new Invitation({ ...model }) : null;
   }
 
@@ -44,8 +47,7 @@ export class InvitationRepositoryImpl implements InvitationRepository {
     groupId: number,
     invitedUserId: number
   ): Promise<Invitation | null> {
-    const repo = AppDataSource.getRepository(InvitationModel);
-    const model = await repo.findOne({
+    const model = await this.repository.findOne({
       where: {
         groupId,
         invitedUserId,
@@ -57,15 +59,13 @@ export class InvitationRepositoryImpl implements InvitationRepository {
   }
 
   async updateStatus(id: number, status: InvitationStatus): Promise<void> {
-    const repo = AppDataSource.getRepository(InvitationModel);
-    await repo.update(id, {
+    await this.repository.update(id, {
       status,
       respondedAt: new Date(),
     });
   }
 
   async delete(id: number): Promise<void> {
-    const repo = AppDataSource.getRepository(InvitationModel);
-    await repo.delete(id);
+    await this.repository.delete(id);
   }
 }
