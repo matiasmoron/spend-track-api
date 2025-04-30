@@ -1,30 +1,36 @@
 import { randomUUID } from 'crypto';
-import { Server } from 'http';
 import request from 'supertest';
+import { QueryRunner } from 'typeorm';
 import app from '../../../src/app';
+import { AppError } from '../../../src/application/errors';
 import { LoginOutput } from '../../../src/application/use-cases/user';
 import { initDI } from '../../../src/config/di';
 import { AppDataSource } from '../../../src/infrastructure/database/DataSource';
 import { BaseResponse } from '../../../src/interfaces/http/types/BaseResponseTypes';
+import { TestServerInstance } from './TestServer';
 
 const PORT_DEFAULT = Number(process.env.PORT_TEST || 8082);
-
-interface TestEnvironmentProps {
-  port?: number;
-  showLogs?: boolean;
-}
 
 export class TestEnvironment {
   token: string;
   readonly userName: string = `userName-${randomUUID()}`;
   readonly userEmail: string = `userEmail-${randomUUID()}@gmail.com`;
-  private server: Server | null = null;
   private readonly showLogs: boolean;
   private readonly port: number;
+  private _queryRunner: QueryRunner;
+  private static refCount = 0;
+  private static instance: TestEnvironment;
 
-  constructor(props: TestEnvironmentProps = {}) {
+  private constructor(props: { port?: number; showLogs?: boolean } = {}) {
     this.showLogs = props.showLogs ?? false;
     this.port = props.port ?? PORT_DEFAULT;
+  }
+
+  public static getInstance(): TestEnvironment {
+    if (!TestEnvironment.instance) {
+      TestEnvironment.instance = new TestEnvironment();
+    }
+    return TestEnvironment.instance;
   }
 
   private log(message: string) {
@@ -39,35 +45,38 @@ export class TestEnvironment {
     }
   }
 
-  async init(): Promise<void> {
-    try {
-      await initDI();
-
-      this.log(`🧪 AppDataSource.isInitialized: ${AppDataSource.isInitialized}`);
-
-      this.server = app.listen(this.port, () => {
-        this.log(`✅ Server is running on port ${this.port}`);
-      });
-    } catch (err) {
-      this.error('❌ Error initializing test environment:', err);
-      throw err;
+  get queryRunner(): QueryRunner {
+    if (!this._queryRunner) {
+      throw new AppError('QueryRunner not initialized. Call init() first.');
     }
+    return this._queryRunner;
+  }
+
+  async init(): Promise<void> {
+    if (TestEnvironment.refCount === 0) {
+      const { dataSourceInstance } = await initDI();
+      this._queryRunner = dataSourceInstance.createQueryRunner();
+      await this.queryRunner.connect();
+
+      await TestServerInstance.start(this.port, this.showLogs);
+    }
+    TestEnvironment.refCount++;
   }
 
   async finish(): Promise<void> {
-    if (this.server) {
-      await new Promise<void>((resolve) => {
-        this.server.close(() => {
-          this.log('🛑 Server closed');
-          resolve();
-        });
-      });
-    }
+    TestEnvironment.refCount--;
+    if (TestEnvironment.refCount <= 0) {
+      if (this.queryRunner?.isReleased === false) {
+        await this.queryRunner.release();
+      }
 
-    if (AppDataSource.isInitialized) {
-      await AppDataSource.destroy();
-      await new Promise((r) => setTimeout(r, 500)); // <- delay to ensure the complete close
-      this.log('🛑 AppDataSource closed');
+      if (AppDataSource.isInitialized) {
+        await AppDataSource.destroy();
+        await new Promise((r) => setTimeout(r, 500)); // <- delay to ensure the complete close
+        this.log('🛑 AppDataSource closed');
+      }
+
+      await TestServerInstance.stop(this.showLogs);
     }
   }
 
@@ -92,3 +101,5 @@ export class TestEnvironment {
     this.token = (loginRes.body as BaseResponse<LoginOutput>).data.token;
   }
 }
+
+export const TestEnvironmentInstance = TestEnvironment.getInstance();
