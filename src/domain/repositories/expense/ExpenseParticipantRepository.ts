@@ -1,7 +1,7 @@
 import { Expense } from '../../../domain/entities/expense/Expense';
 import { ExpenseParticipant } from '../../../domain/entities/expense/ExpenseParticipant';
 
-export interface ExpenseRepository {
+export interface ExpenseParticipantRepository {
   create(expense: Expense, participants: ExpenseParticipant[]): Promise<Expense>;
-  findByGroupId(groupId: number): Promise<Expense[]>;
+  findByExpenseId(expenseId: number): Promise<ExpenseParticipant[]>;
 }

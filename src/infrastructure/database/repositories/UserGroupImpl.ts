@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { UserGroup } from '../../../domain/entities/group';
+import { UserGroup, UserGroupWithUserName } from '../../../domain/entities/group';
 import { UserGroupRepository } from '../../../domain/repositories/group/UserGroupRepository';
 import { AppDataSource } from '../DataSource';
 import { UserGroupModel } from '../models/UserGroupModel';
@@ -20,25 +20,34 @@ export class UserGroupRepoImpl implements UserGroupRepository {
     return await this.repository.findBy({ userId });
   }
 
-  async findByGroupId(groupId: number): Promise<UserGroup[]> {
-    return await this.repository.findBy({ groupId });
+  async findByGroupId(groupId: number): Promise<UserGroupWithUserName[]> {
+    return await this.repository
+      .createQueryBuilder('ug')
+      .innerJoin('users', 'u', 'ug.userId = u.id')
+      .select([
+        'ug.id         AS "id"',
+        'ug.userId    AS "userId"',
+        'ug.groupId   AS "groupId"',
+        'ug.created_at AS "createdAt"',
+        'ug.updated_at AS "updatedAt"',
+        'u.name        AS "userName"',
+      ])
+      .where('ug.groupId = :groupId', { groupId })
+      .getRawMany();
   }
 
   async addUserToGroup(userId: number, groupId: number): Promise<void> {
-    const repo = AppDataSource.getRepository(UserGroupModel);
-    const entry = repo.create({ userId, groupId });
-    await repo.save(entry);
+    const entry = this.repository.create({ userId, groupId });
+    await this.repository.save(entry);
   }
 
   async getUserGroups(userId: number): Promise<number[]> {
-    const repo = AppDataSource.getRepository(UserGroupModel);
-    const results = await repo.find({ where: { userId } });
+    const results = await this.repository.find({ where: { userId } });
     return results.map((r) => r.groupId);
   }
 
   async isUserInGroup(userId: number, groupId: number): Promise<boolean> {
-    const repo = AppDataSource.getRepository(UserGroupModel);
-    const count = await repo.count({ where: { userId, groupId } });
+    const count = await this.repository.count({ where: { userId, groupId } });
     return count > 0;
   }
 }

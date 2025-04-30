@@ -7,9 +7,9 @@ import { ERROR_VALIDATION_MESSAGE, ERROR_VALIDATION_TYPE } from '../../../src/ap
 import { GroupType } from '../../../src/domain/value-objects';
 import { AppDataSource } from '../../../src/infrastructure/database/DataSource';
 import { UserModel } from '../../../src/infrastructure/database/models/UserModel';
-import { TestEnvironment } from '../shared/testEnvironment';
+import { TestEnvironmentInstance } from '../shared/testEnvironment';
 
-const testEnv = new TestEnvironment();
+const testEnv = TestEnvironmentInstance;
 
 const ENDPOINT_ROUTE = '/api/groups/create';
 let groupName: string;
@@ -23,6 +23,7 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
+  await testEnv.queryRunner?.startTransaction();
   await testEnv.createTestUser();
 });
 
@@ -36,12 +37,14 @@ afterEach(async () => {
   await AppDataSource.manager.delete(UserModel, {
     email: testEnv.userEmail,
   });
+
+  await testEnv.queryRunner?.rollbackTransaction();
 });
 
 describe('POST /api/groups', () => {
   describe('✅ Happy paths', () => {
     it('should create a group successfully with type trip', async () => {
-      groupName = `group_trip_${randomUUID()}`;
+      groupName = `test_group_trip_${randomUUID()}`;
 
       const response = await request(app)
         .post(ENDPOINT_ROUTE)
