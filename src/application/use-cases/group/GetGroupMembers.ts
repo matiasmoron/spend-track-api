@@ -1,4 +1,4 @@
-import { AppError } from 'application/errors';
+import { AppError } from '../../../application/errors';
 import { GroupMemberInfo } from '../../../domain/entities/group';
 import { UserGroupRepository } from '../../../domain/repositories/group/UserGroupRepository';
 
@@ -7,14 +7,12 @@ interface GetGroupMembersInput {
   userId: number;
 }
 
-type GetGroupMembersOutput = GroupMemberInfo[];
-
 export const getGroupMembers = async (
   input: GetGroupMembersInput,
   deps: {
     userGroupRepository: UserGroupRepository;
   }
-): Promise<GetGroupMembersOutput> => {
+): Promise<GroupMemberInfo[]> => {
   const { userGroupRepository } = deps;
 
   // Fetch group members

@@ -37,8 +37,6 @@ export class GroupController {
 
   async getByUser(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log('ENTRO');
-
       const { id: userId } = req.user;
       const result = await getGroupsByUser({ userId }, groupRepository);
       BaseResponse.success(res, result);

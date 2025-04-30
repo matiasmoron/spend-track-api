@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { createExpense } from '../../../application/use-cases/expense/CreateExpense';
-import { expenseRepository } from '../../../config/di';
+import { expenseRepository, userGroupRepository } from '../../../config/di';
 import { AuthenticatedRequest } from '../../../interfaces/http/types/AuthenticatedRequest';
 import { BaseResponse } from '../../../interfaces/http/utils/BaseResponse';
 import { CreateExpenseDTO } from '../../../interfaces/validators/expense';
@@ -11,13 +11,12 @@ export class ExpenseController {
     try {
       const dto = await validateDTO(CreateExpenseDTO, req.body);
 
-      console.log({ dto });
-
       const input = {
         ...dto,
+        userId: Number(req.user.id),
       };
 
-      const result = await createExpense(expenseRepository, input);
+      const result = await createExpense(input, { expenseRepository, userGroupRepository });
       return BaseResponse.success(res, result, 201);
     } catch (error) {
       next(error);

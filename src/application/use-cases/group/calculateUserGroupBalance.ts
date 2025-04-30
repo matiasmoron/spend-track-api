@@ -55,12 +55,12 @@ export const calculateUserGroupBalance = (
       netPerUser[p.userId] = (netPerUser[p.userId] ?? 0) + Number(p.amount);
     });
 
-    console.log(netPerUser);
+    // console.log(netPerUser);
     Object.entries(netPerUser).forEach(([id, net]) => {
       const otherId = Number(id);
       if (otherId === userId) return; // skip self
 
-      console.log({ otherId, id, net, currency: exp.currency });
+      // console.log({ otherId, id, net, currency: exp.currency });
 
       balances[otherId][exp.currency] = (balances[otherId][exp.currency] ?? 0) + net;
     });
