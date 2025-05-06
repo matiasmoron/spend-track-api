@@ -9,6 +9,7 @@ import { ExpenseDetail, getExpensesByGroup } from '../expense/GetExpensesByGroup
 import { getGroupMembers } from './GetGroupMembers';
 import {
   calculateUserGroupBalance,
+  ExpenseDetailFormatted,
   MemberBalanceEntry,
   UserBalanceSummaryEntry,
 } from './calculateUserGroupBalance';
@@ -25,6 +26,7 @@ export interface GetGroupByIdOutput {
   members: GroupMemberInfo[];
   balanceSummary: UserBalanceSummaryEntry[];
   memberBalances: MemberBalanceEntry[];
+  expenses: ExpenseDetailFormatted[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -72,6 +74,7 @@ export const getGroupById = async (
     members: groupMembers,
     balanceSummary: userBalance.balanceSummary,
     memberBalances: userBalance.memberBalances,
+    expenses: userBalance.expenses,
     createdAt: group.createdAt,
     updatedAt: group.updatedAt,
   };
