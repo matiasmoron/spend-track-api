@@ -47,7 +47,10 @@ export class ExpenseRepositoryImpl implements ExpenseRepository {
    * Fetch all expenses for a given group
    */
   async findByGroupId(groupId: number): Promise<Expense[]> {
-    const records = await this.ormRepo.find({ where: { groupId } });
+    const records = await this.ormRepo.find({
+      where: { groupId },
+      order: { createdAt: 'DESC' },
+    });
     return records.map(
       (r) =>
         new Expense({
