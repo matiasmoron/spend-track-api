@@ -83,6 +83,44 @@ export class ExpenseRepositoryImpl implements ExpenseRepository {
   }
 
   /**
+   * Update expense and its participants in a transaction
+   */
+  async update(expense: Expense, participants: ExpenseParticipant[]): Promise<Expense> {
+    return await AppDataSource.transaction(async (manager) => {
+      const expenseRepo = manager.getRepository(ExpenseModel);
+      const participantRepo = manager.getRepository(ExpenseParticipantModel);
+
+      // Update the expense
+      await expenseRepo.update(expense.id, {
+        groupId: expense.groupId,
+        description: expense.description,
+        total: expense.total,
+        currency: expense.currency,
+        createdAt: expense.createdAt,
+      });
+
+      // Delete existing participants
+      await participantRepo.delete({ expenseId: expense.id });
+
+      // Create new participants
+      const participantEntities = participants.map((p) =>
+        participantRepo.create({
+          expenseId: expense.id,
+          userId: p.userId,
+          amount: p.amount,
+        })
+      );
+
+      await participantRepo.save(participantEntities);
+
+      // Return the updated expense
+      return new Expense({
+        ...expense,
+      });
+    });
+  }
+
+  /**
    * Delete expense and its participants in a transaction
    */
   async delete(id: number): Promise<void> {
