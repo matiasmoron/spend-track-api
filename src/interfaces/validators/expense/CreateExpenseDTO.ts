@@ -1,10 +1,12 @@
 import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
+  IsDate,
   IsEnum,
   IsInt,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPositive,
   IsString,
   MinLength,
@@ -50,4 +52,9 @@ export class CreateExpenseDTO {
   @ValidateNested({ each: true })
   @Type(() => ParticipantInputDTO)
   splits!: ParticipantInputDTO[];
+
+  @IsOptional()
+  @IsDate({ message: 'CreatedAt must be a valid date' })
+  @Type(() => Date)
+  createdAt?: Date;
 }

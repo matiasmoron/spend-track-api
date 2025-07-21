@@ -13,6 +13,7 @@ export interface CreateExpenseInput {
   currency: Currency;
   paidBy: { userId: number; amount: number }[];
   splits: { userId: number; amount: number }[];
+  createdAt?: Date;
 }
 
 const validateAllUsersBelongToGroup = (
@@ -31,7 +32,7 @@ export async function createExpense(
 ): Promise<Expense> {
   const { expenseRepository, userGroupRepository } = deps;
 
-  const { groupId, description, total, currency, paidBy, splits, userId } = input;
+  const { groupId, description, total, currency, paidBy, splits, userId, createdAt } = input;
 
   const totalPaid = paidBy.reduce((sum, p) => sum + p.amount, 0);
   const totalSplit = splits.reduce((sum, s) => sum + s.amount, 0);
@@ -57,14 +58,15 @@ export async function createExpense(
     throw new AppError('Sum of splits does not match total', 400);
   }
 
-  const createdAt = new Date();
+  const expenseCreatedAt = createdAt || new Date();
+
   const expense = new Expense({
     id: 0, // Placeholder, DB will assign real ID
     groupId,
     description,
     total,
     currency,
-    createdAt,
+    createdAt: expenseCreatedAt,
   });
 
   const participants: ExpenseParticipant[] = [
