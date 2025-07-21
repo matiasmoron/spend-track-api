@@ -14,7 +14,7 @@ import {
 } from 'class-validator';
 import { Currency } from '../../../domain/value-objects';
 
-export class ParticipantInputDTO {
+export class UpdateExpenseParticipantInputDTO {
   @IsNotEmpty({ message: 'User ID is required' })
   @IsInt({ message: 'User ID must be an integer' })
   userId!: number;
@@ -24,10 +24,10 @@ export class ParticipantInputDTO {
   amount!: number;
 }
 
-export class CreateExpenseDTO {
-  @IsNotEmpty({ message: 'Group ID is required' })
-  @IsInt({ message: 'Group ID must be an integer' })
-  groupId!: number;
+export class UpdateExpenseDTO {
+  @IsNotEmpty({ message: 'Expense ID is required' })
+  @IsInt({ message: 'Expense ID must be an integer' })
+  expenseId!: number;
 
   @IsNotEmpty({ message: 'Description is required' })
   @IsString()
@@ -45,13 +45,13 @@ export class CreateExpenseDTO {
 
   @ArrayNotEmpty({ message: 'PaidBy must have at least one entry' })
   @ValidateNested({ each: true })
-  @Type(() => ParticipantInputDTO)
-  paidBy!: ParticipantInputDTO[];
+  @Type(() => UpdateExpenseParticipantInputDTO)
+  paidBy!: UpdateExpenseParticipantInputDTO[];
 
   @ArrayNotEmpty({ message: 'Splits must have at least one entry' })
   @ValidateNested({ each: true })
-  @Type(() => ParticipantInputDTO)
-  splits!: ParticipantInputDTO[];
+  @Type(() => UpdateExpenseParticipantInputDTO)
+  splits!: UpdateExpenseParticipantInputDTO[];
 
   @IsOptional()
   @IsDate({ message: 'CreatedAt must be a valid date' })

@@ -64,4 +64,78 @@ export class ExpenseRepositoryImpl implements ExpenseRepository {
         })
     );
   }
+
+  /**
+   * Find expense by ID
+   */
+  async findById(id: number): Promise<Expense | null> {
+    const record = await this.ormRepo.findOne({ where: { id } });
+    if (!record) {
+      return null;
+    }
+
+    return new Expense({
+      id: record.id,
+      groupId: record.groupId,
+      description: record.description,
+      total: record.total,
+      currency: record.currency,
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+    });
+  }
+
+  /**
+   * Update expense and its participants in a transaction
+   */
+  async update(expense: Expense, participants: ExpenseParticipant[]): Promise<Expense> {
+    return await AppDataSource.transaction(async (manager) => {
+      const expenseRepo = manager.getRepository(ExpenseModel);
+      const participantRepo = manager.getRepository(ExpenseParticipantModel);
+
+      // Update the expense
+      await expenseRepo.update(expense.id, {
+        groupId: expense.groupId,
+        description: expense.description,
+        total: expense.total,
+        currency: expense.currency,
+        createdAt: expense.createdAt,
+      });
+
+      // Delete existing participants
+      await participantRepo.delete({ expenseId: expense.id });
+
+      // Create new participants
+      const participantEntities = participants.map((p) =>
+        participantRepo.create({
+          expenseId: expense.id,
+          userId: p.userId,
+          amount: p.amount,
+        })
+      );
+
+      await participantRepo.save(participantEntities);
+
+      // Return the updated expense
+      return new Expense({
+        ...expense,
+      });
+    });
+  }
+
+  /**
+   * Delete expense and its participants in a transaction
+   */
+  async delete(id: number): Promise<void> {
+    await AppDataSource.transaction(async (manager) => {
+      const expenseRepo = manager.getRepository(ExpenseModel);
+      const participantRepo = manager.getRepository(ExpenseParticipantModel);
+
+      // First delete all participants
+      await participantRepo.delete({ expenseId: id });
+
+      // Then delete the expense
+      await expenseRepo.delete({ id });
+    });
+  }
 }
