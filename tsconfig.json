@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2021",
-    "module": "CommonJS",
-    "moduleResolution": "bundler",
+    "module": "node16",
+    "moduleResolution": "node16",
     "lib": ["ES2021"],
     "rootDir": ".",
     "baseUrl": "src",

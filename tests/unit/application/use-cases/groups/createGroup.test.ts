@@ -7,6 +7,7 @@ const mockGroupRepository: jest.Mocked<GroupRepository> = {
   save: jest.fn(),
   findById: jest.fn(),
   findByUserId: jest.fn(),
+  delete: jest.fn(),
 };
 
 const mockUserGroupRepository: jest.Mocked<UserGroupRepository> = {
