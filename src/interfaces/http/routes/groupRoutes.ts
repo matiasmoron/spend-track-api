@@ -13,5 +13,6 @@ groupRouter.get(
   groupController.getGroupMembers.bind(groupController)
 );
 groupRouter.get('/', authenticateJWT, groupController.getByUser.bind(groupController));
+groupRouter.delete('/:groupId', authenticateJWT, groupController.delete.bind(groupController));
 
 export default groupRouter;

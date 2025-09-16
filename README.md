@@ -60,6 +60,7 @@ src/
 ## 🚀 Getting Started
 
 ### 1. Clone and install:
+
 ```bash
 git clone https://github.com/your-username/spend-track-api.git
 cd spend-track-api
@@ -67,6 +68,7 @@ yarn install
 ```
 
 ### 2. Environment variables
+
 Create a `.env` file with the following content:
 
 ```env
@@ -83,6 +85,7 @@ DB_NAME=spent_track
 ### 3. Create the database and apply migrations (if needed)
 
 ### 4. Start the app in dev mode:
+
 ```bash
 yarn dev
 ```
@@ -108,10 +111,12 @@ yarn test:integration # Run integration tests only
 ## 📊 Testing
 
 Tests are split into:
+
 - **Unit tests**: each use case is tested in isolation
 - **Integration tests**: test endpoints with Express + real DB + JWT auth
 
 Directory structure:
+
 ```
 tests/
 ├── unit/
@@ -134,17 +139,17 @@ This project is under active development. Pull requests, ideas and improvements 
 ## 🚀 Roadmap
 
 - [x] Group and user creation
-- [ ] Expenses with multiple payers
-- [ ] Notifications and invitations
-- [ ] Group dashboard and balances
+- [x] Expenses with multiple payers
+- [x] Notifications and invitations
+- [x] Group dashboard and balances
 - [ ] API exports and integrations
 
 ---
 
 ## ✨ Author
+
 **Matías Morón**
 
 ---
 
 > 📊 If you like this project, feel free to star it or share it!
-

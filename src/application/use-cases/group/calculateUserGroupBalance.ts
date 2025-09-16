@@ -2,8 +2,6 @@ import { GroupMemberInfo } from '../../../domain/entities/group';
 import { Currency } from '../../../domain/value-objects';
 import { ExpenseDetail } from '../expense/GetExpensesByGroup';
 
-// src/application/use-cases/group/CalculateUserGroupBalance.ts
-
 export interface ParticipantShare {
   userId: number;
   currency: Currency;
@@ -22,9 +20,17 @@ export interface UserBalanceSummaryEntry {
   amount: number; // positive if they owe you, negative if you owe
 }
 
+export type ExpenseDetailFormatted = Omit<ExpenseDetail, 'participants'> & {
+  participants: {
+    userId: number;
+    amount: number;
+  }[];
+};
+
 export interface CalculateUserGroupBalanceResult {
   balanceSummary: UserBalanceSummaryEntry[];
   memberBalances: MemberBalanceEntry[];
+  expenses: ExpenseDetailFormatted[];
 }
 
 /**
@@ -48,19 +54,36 @@ export const calculateUserGroupBalance = (
     balances[m.userId] = {};
   });
 
+  const expensesFormatted: ExpenseDetailFormatted[] = [];
+
   // 2) Accumulate net per expense for each other member
   expenses.forEach((exp) => {
     const netPerUser: Record<number, number> = {};
+
+    
+    let expenseParticipants = [];
+
     exp.participants.forEach((p) => {
       netPerUser[p.userId] = (netPerUser[p.userId] ?? 0) + Number(p.amount);
+
+      expenseParticipants.push({
+        userId: p.userId,
+        amount: Number(p.amount),
+      });
     });
 
-    // console.log(netPerUser);
+    // Deep clone expense to avoid mutating original
+    const expenseClone = JSON.parse(
+      JSON.stringify({
+        ...exp,
+        participants: expenseParticipants,
+      })
+    ) as ExpenseDetailFormatted;
+    expensesFormatted.push(expenseClone);
+
     Object.entries(netPerUser).forEach(([id, net]) => {
       const otherId = Number(id);
       if (otherId === userId) return; // skip self
-
-      // console.log({ otherId, id, net, currency: exp.currency });
 
       balances[otherId][exp.currency] = (balances[otherId][exp.currency] ?? 0) + net;
     });
@@ -119,5 +142,5 @@ export const calculateUserGroupBalance = (
     });
   });
 
-  return { balanceSummary, memberBalances };
+  return { balanceSummary, memberBalances, expenses: expensesFormatted };
 };

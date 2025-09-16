@@ -10,6 +10,7 @@ export interface ExpenseDetail {
   participants: ExpenseParticipant[];
   createdAt: Date;
   updatedAt: Date;
+  description: string;
 }
 
 export interface GetExpensesByGroupInput {
@@ -36,6 +37,7 @@ export const getExpensesByGroup = async (
 
     results.push({
       id: exp.id,
+      description: exp.description,
       total: exp.total,
       currency: exp.currency,
       participants,
