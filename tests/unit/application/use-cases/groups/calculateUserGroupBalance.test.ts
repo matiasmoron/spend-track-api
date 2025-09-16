@@ -1,6 +1,6 @@
-import { calculateUserGroupBalance } from '../../../../../src/application/use-cases/group/calculateUserGroupBalance';
-import { Currency } from '../../../../../src/domain/value-objects/Currency';
-import { TestDataGenerator } from '../../../../utils/TestDataGenerator';
+import { TestDataGenerator } from '@tests/utils/TestDataGenerator';
+import { calculateUserGroupBalance } from '@/application/use-cases/group/calculateUserGroupBalance';
+import { Currency } from '@/domain/value-objects/Currency';
 
 describe('calculateUserGroupBalance', () => {
   afterEach(() => {

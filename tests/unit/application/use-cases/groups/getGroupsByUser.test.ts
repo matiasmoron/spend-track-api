@@ -1,6 +1,6 @@
-import { getGroupsByUser } from '../../../../../src/application/use-cases/group/GetGroupsByUser';
-import { GroupRepository } from '../../../../../src/domain/repositories/group/GroupRepository';
-import { TestDataGenerator } from '../../../../utils/TestDataGenerator';
+import { TestDataGenerator } from '@tests/utils/TestDataGenerator';
+import { getGroupsByUser } from '@/application/use-cases/group/GetGroupsByUser';
+import { GroupRepository } from '@/domain/repositories/group/GroupRepository';
 
 const mockGroupRepository: jest.Mocked<GroupRepository> = {
   save: jest.fn(),

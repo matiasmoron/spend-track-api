@@ -1,7 +1,7 @@
-import { createGroup } from '../../../../../src/application/use-cases/group/CreateGroup';
-import { GroupRepository } from '../../../../../src/domain/repositories/group/GroupRepository';
-import { UserGroupRepository } from '../../../../../src/domain/repositories/group/UserGroupRepository';
-import { TestDataGenerator } from '../../../../utils/TestDataGenerator';
+import { TestDataGenerator } from '@tests/utils/TestDataGenerator';
+import { createGroup } from '@/application/use-cases/group/CreateGroup';
+import { GroupRepository } from '@/domain/repositories/group/GroupRepository';
+import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
 
 const mockGroupRepository: jest.Mocked<GroupRepository> = {
   save: jest.fn(),
@@ -47,8 +47,6 @@ describe('createGroup', () => {
       type: mockGroup.type,
       createdBy: mockUser.id,
     });
-
-    console.log({ result });
 
     expect(mockGroupRepository.save).toHaveBeenCalledWith({
       name: mockGroup.name,
