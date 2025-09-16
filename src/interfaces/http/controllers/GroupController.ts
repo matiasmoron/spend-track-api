@@ -1,5 +1,6 @@
 import { NextFunction, Response } from 'express';
 import { createGroup } from '../../../application/use-cases/group/CreateGroup';
+import { deleteGroup } from '../../../application/use-cases/group/DeleteGroup';
 import { getGroupById } from '../../../application/use-cases/group/GetGroupById';
 import { getGroupMembers } from '../../../application/use-cases/group/GetGroupMembers';
 import { getGroupsByUser } from '../../../application/use-cases/group/GetGroupsByUser';
@@ -9,9 +10,12 @@ import {
   groupRepository,
   userGroupRepository,
 } from '../../../config/di';
-import { CreateGroupDTO } from '../../../interfaces/validators/group';
-import { GetGroupMembersDTO } from '../../../interfaces/validators/group/GetGroupMembersDTO';
-import { GetGroupDetailsDTO } from '../../validators/group/GetGroupDetailsDTO';
+import {
+  CreateGroupDTO,
+  DeleteGroupDTO,
+  GetGroupDetailsDTO,
+  GetGroupMembersDTO,
+} from '../../../interfaces/validators/group';
 import { AuthenticatedRequest } from '../types/AuthenticatedRequest';
 import { BaseResponse } from '../utils/BaseResponse';
 import { validateDTO } from '../utils/validateDTO';
@@ -84,6 +88,22 @@ export class GroupController {
       });
 
       BaseResponse.success(res, result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async delete(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const dto = await validateDTO(DeleteGroupDTO, { groupId: Number(req.params.groupId) });
+
+      const input = {
+        groupId: dto.groupId,
+        userId: Number(req.user.id),
+      };
+
+      await deleteGroup(input, { groupRepository, userGroupRepository });
+      return BaseResponse.success(res, { message: 'Group deleted successfully' }, 200);
     } catch (error) {
       next(error);
     }
