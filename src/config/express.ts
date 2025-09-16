@@ -47,16 +47,21 @@ export function initExpress(): Express {
   );
 
   app.use((req, res, next) => {
-    if (req.method !== 'GET' && req.headers['content-type'] !== 'application/json') {
-      return BaseResponse.error(
-        res,
-        {
-          message: 'Content-Type must be application/json',
-        },
-        400
-      );
+    if (
+      req.method === 'GET' ||
+      (req.method === 'DELETE' && !req.headers['content-length']) ||
+      req.headers['content-type'] === 'application/json'
+    ) {
+      return next();
     }
-    next();
+
+    return BaseResponse.error(
+      res,
+      {
+        message: 'Content-Type must be application/json',
+      },
+      400
+    );
   });
 
   return app;
