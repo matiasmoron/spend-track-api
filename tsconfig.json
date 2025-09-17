@@ -5,7 +5,11 @@
     "moduleResolution": "node16",
     "lib": ["ES2021"],
     "rootDir": ".",
-    "baseUrl": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@tests/*": ["tests/*"]
+    },
     "outDir": "dist",
     "strict": false,
     "isolatedModules": true,

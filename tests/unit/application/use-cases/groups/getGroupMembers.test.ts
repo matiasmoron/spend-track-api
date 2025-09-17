@@ -1,7 +1,7 @@
-import { AppError } from '../../../../../src/application/errors/AppError';
-import { getGroupMembers } from '../../../../../src/application/use-cases/group/GetGroupMembers';
-import { UserGroupRepository } from '../../../../../src/domain/repositories/group/UserGroupRepository';
-import { TestDataGenerator } from '../../../../utils/TestDataGenerator';
+import { TestDataGenerator } from '@tests/utils/TestDataGenerator';
+import { AppError } from '@/application/errors/AppError';
+import { getGroupMembers } from '@/application/use-cases/group/GetGroupMembers';
+import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
 
 const mockUserGroupRepository: jest.Mocked<UserGroupRepository> = {
   addUserToGroup: jest.fn(),

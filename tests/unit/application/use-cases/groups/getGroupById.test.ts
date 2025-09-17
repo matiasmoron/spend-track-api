@@ -1,10 +1,10 @@
-import { AppError } from '../../../../../src/application/errors/AppError';
-import { getGroupById } from '../../../../../src/application/use-cases/group/GetGroupById';
-import { ExpenseParticipantRepository } from '../../../../../src/domain/repositories/expense/ExpenseParticipantRepository';
-import { ExpenseRepository } from '../../../../../src/domain/repositories/expense/ExpenseRepository';
-import { GroupRepository } from '../../../../../src/domain/repositories/group/GroupRepository';
-import { UserGroupRepository } from '../../../../../src/domain/repositories/group/UserGroupRepository';
-import { TestDataGenerator } from '../../../../utils/TestDataGenerator';
+import { TestDataGenerator } from '@tests/utils/TestDataGenerator';
+import { AppError } from '@/application/errors/AppError';
+import { getGroupById } from '@/application/use-cases/group/GetGroupById';
+import { ExpenseParticipantRepository } from '@/domain/repositories/expense/ExpenseParticipantRepository';
+import { ExpenseRepository } from '@/domain/repositories/expense/ExpenseRepository';
+import { GroupRepository } from '@/domain/repositories/group/GroupRepository';
+import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
 
 const mockGroupRepository: jest.Mocked<GroupRepository> = {
   save: jest.fn(),
