@@ -17,13 +17,13 @@ export async function sendInvitation(
 ): Promise<Invitation> {
   const { groupId, invitedUserId, invitedById } = input;
 
-  // Ya es miembro del grupo
+  // The member is already in the group
   const isMember = await userGroupRepository.isUserInGroup(invitedUserId, groupId);
   if (isMember) {
     throw new AppError('User is already a member of the group', 400);
   }
 
-  // Ya tiene invitación pendiente
+  // The user already has a pending invitation
   const existingInvitation = await invitationRepository.findPendingByGroupAndUser(
     groupId,
     invitedUserId
@@ -34,12 +34,13 @@ export async function sendInvitation(
 
   const now = new Date();
 
+  // The invitation is created with status 'Accepted' by default
   const invitation = new Invitation({
     id: 0, // será reemplazado al persistir
     groupId,
     invitedById,
     invitedUserId,
-    status: InvitationStatus.Pending,
+    status: InvitationStatus.Accepted,
     createdAt: now,
   });
 
