@@ -14,7 +14,8 @@
     "start": "node dist/src/index.js",
     "test:integration": "jest tests/integration --verbose --detectOpenHandles",
     "test:unit": "jest tests/unit --passWithNoTests",
-    "test": "tsc --project tsconfig.test.json --noEmit && jest"
+    "test": "tsc --project tsconfig.test.json --noEmit && jest",
+  "test:coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
