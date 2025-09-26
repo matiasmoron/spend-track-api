@@ -60,7 +60,6 @@ export const calculateUserGroupBalance = (
   expenses.forEach((exp) => {
     const netPerUser: Record<number, number> = {};
 
-    
     let expenseParticipants = [];
 
     exp.participants.forEach((p) => {
