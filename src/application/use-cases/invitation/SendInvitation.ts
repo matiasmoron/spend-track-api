@@ -32,7 +32,7 @@ export async function sendInvitation(
   }
 
   if (!resolvedUserId) {
-    throw new AppError('Either invitedUserId or invitedUserEmail must be provided', 404);
+    throw new AppError('Either invitedUserId or invitedUserEmail must be provided', 400);
   }
 
   // The inviter should be a member of the group
@@ -72,13 +72,13 @@ export async function sendInvitation(
   try {
     invitation = await invitationRepository.create(invitation);
   } catch (error) {
-    throw new AppError('Error creating invitation', error.statusCode || 500);
+    throw new AppError('Error creating invitation', error?.statusCode || 500);
   }
 
   try {
     await userGroupRepository.addUserToGroup(resolvedUserId, invitation.groupId);
   } catch (error) {
-    throw new AppError('Error adding user to group', error.statusCode || 500);
+    throw new AppError('Error adding user to group', error?.statusCode || 500);
   }
 
   return invitation;
