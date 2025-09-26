@@ -72,13 +72,13 @@ export async function sendInvitation(
   try {
     invitation = await invitationRepository.create(invitation);
   } catch (error) {
-    throw new AppError('Error creating invitation', error.statusCode || 500);
+    throw new AppError('Error creating invitation', error?.statusCode || 500);
   }
 
   try {
     await userGroupRepository.addUserToGroup(resolvedUserId, invitation.groupId);
   } catch (error) {
-    throw new AppError('Error adding user to group', error.statusCode || 500);
+    throw new AppError('Error adding user to group', error?.statusCode || 500);
   }
 
   return invitation;
