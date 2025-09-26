@@ -32,7 +32,7 @@ export async function sendInvitation(
   }
 
   if (!resolvedUserId) {
-    throw new AppError('Either invitedUserId or invitedUserEmail must be provided', 404);
+    throw new AppError('Either invitedUserId or invitedUserEmail must be provided', 400);
   }
 
   // The inviter should be a member of the group
