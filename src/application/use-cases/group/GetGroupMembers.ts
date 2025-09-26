@@ -1,6 +1,6 @@
-import { AppError } from '../../../application/errors';
-import { GroupMemberInfo } from '../../../domain/entities/group';
-import { UserGroupRepository } from '../../../domain/repositories/group/UserGroupRepository';
+import { AppError } from '@/application/errors';
+import { GroupMemberInfo } from '@/domain/entities/group';
+import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
 
 interface GetGroupMembersInput {
   groupId: number;

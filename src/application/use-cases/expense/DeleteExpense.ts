@@ -1,6 +1,6 @@
-import { AppError } from '../../../application/errors/AppError';
-import { ExpenseRepository } from '../../../domain/repositories/expense/ExpenseRepository';
-import { UserGroupRepository } from '../../../domain/repositories/group/UserGroupRepository';
+import { AppError } from '@/application/errors/AppError';
+import { ExpenseRepository } from '@/domain/repositories/expense/ExpenseRepository';
+import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
 
 export interface DeleteExpenseInput {
   expenseId: number;

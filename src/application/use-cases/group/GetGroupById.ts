@@ -1,18 +1,21 @@
-import { AppError } from '../../../application/errors';
-import { GroupMemberInfo } from '../../../domain/entities/group';
-import { ExpenseParticipantRepository } from '../../../domain/repositories/expense/ExpenseParticipantRepository';
-import { ExpenseRepository } from '../../../domain/repositories/expense/ExpenseRepository';
-import { GroupRepository } from '../../../domain/repositories/group/GroupRepository';
-import { UserGroupRepository } from '../../../domain/repositories/group/UserGroupRepository';
-import { GroupType } from '../../../domain/value-objects';
-import { ExpenseDetail, getExpensesByGroup } from '../expense/GetExpensesByGroup';
-import { getGroupMembers } from './GetGroupMembers';
+import { AppError } from '@/application/errors';
+import {
+  ExpenseDetail,
+  getExpensesByGroup,
+} from '@/application/use-cases/expense/GetExpensesByGroup';
+import { getGroupMembers } from '@/application/use-cases/group/GetGroupMembers';
 import {
   calculateUserGroupBalance,
   ExpenseDetailFormatted,
   MemberBalanceEntry,
   UserBalanceSummaryEntry,
-} from './calculateUserGroupBalance';
+} from '@/application/use-cases/group/calculateUserGroupBalance';
+import { GroupMemberInfo } from '@/domain/entities/group';
+import { ExpenseParticipantRepository } from '@/domain/repositories/expense/ExpenseParticipantRepository';
+import { ExpenseRepository } from '@/domain/repositories/expense/ExpenseRepository';
+import { GroupRepository } from '@/domain/repositories/group/GroupRepository';
+import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
+import { GroupType } from '@/domain/value-objects';
 
 export interface GetGroupByIdInput {
   groupId: number;

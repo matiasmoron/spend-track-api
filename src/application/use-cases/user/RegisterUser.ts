@@ -1,7 +1,7 @@
-import { User } from '../../../domain/entities/user/User';
-import { UserRepository } from '../../../domain/repositories/user/UserRepository';
-import { AuthService } from '../../../infrastructure/database/services/AuthService';
-import { AppError } from '../../errors/AppError';
+import { AppError } from '@/application/errors/AppError';
+import { User } from '@/domain/entities/user/User';
+import { UserRepository } from '@/domain/repositories/user/UserRepository';
+import { AuthService } from '@/infrastructure/database/services/AuthService';
 
 interface RegisterUserInput {
   name: string;

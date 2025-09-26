@@ -1,5 +1,5 @@
-import { Group } from '../../../domain/entities/group';
-import { GroupRepository } from '../../../domain/repositories/group/GroupRepository';
+import { Group } from '@/domain/entities/group';
+import { GroupRepository } from '@/domain/repositories/group/GroupRepository';
 
 interface GetGroupsByUserInput {
   userId: number;
