@@ -14,6 +14,7 @@ class Database {
 
   static getInstance(): DataSource {
     if (!Database._instance) {
+      console.log({ HOST: process.env.DB_HOST });
       Database._instance = new DataSource({
         type: 'postgres',
         host: process.env.DB_HOST || 'localhost',
@@ -29,9 +30,9 @@ class Database {
           ExpenseParticipantModel,
           InvitationModel,
         ],
-        synchronize: true, // o false si usás migraciones
+        synchronize: true, // Or false if you use migrations
         ssl: {
-          rejectUnauthorized: false, // Render requiere SSL pero sin verificación estricta
+          rejectUnauthorized: false, // Render requires SSL but without strict verification
         },
       });
     }
