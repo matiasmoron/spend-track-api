@@ -14,10 +14,9 @@ class Database {
 
   static getInstance(): DataSource {
     if (!Database._instance) {
-      console.log({ HOST: process.env.DB_HOST });
       Database._instance = new DataSource({
         type: 'postgres',
-        host: process.env.DB_HOST || 'localhost',
+        host: 'aws-1-us-east-1.pooler.supabase.com',
         port: Number(process.env.DB_PORT) || 3306,
         username: process.env.DB_USER || 'root',
         password: process.env.DB_PASSWORD || '',
