@@ -7,16 +7,9 @@ export const initDB = async () => {
     await AppDataSource.initialize();
     console.log('✅ DB connection initialized.');
   } catch (err) {
-    console.error('❌ Error al inicializar la DB:', err);
+    console.error('❌ DB connection error:', err);
     throw err;
   }
 
   return AppDataSource;
 };
-
-// export async function ensureDataSourceInitialized() {
-//   if (!AppDataSource.isInitialized) {
-//     await AppDataSource.initialize();
-//   }
-//   return AppDataSource;
-// }
