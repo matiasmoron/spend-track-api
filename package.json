@@ -1,5 +1,5 @@
 {
-  "name": "send-track-api",
+  "name": "spend-track-api",
   "version": "1.0.0",
   "description": "API to track all your expenses efficiently and effectively.",
   "main": "dist/src/index.js",

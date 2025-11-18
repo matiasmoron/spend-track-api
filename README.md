@@ -75,7 +75,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=yourpassword
-DB_NAME=spent_track
+DB_NAME=spend_track
 ```
 
 > PostgreSQL is used as the default DB engine.

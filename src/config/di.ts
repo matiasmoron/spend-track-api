@@ -14,9 +14,13 @@ import { initDB } from './database';
 // load environment variables from .env file
 dotenv.config();
 
-const jwtSecret = process.env.JWT_SECRET;
+let jwtSecret = process.env.JWT_SECRET;
 if (typeof jwtSecret !== 'string' || jwtSecret.trim() === '') {
-  throw new Error('JWT_SECRET must be a non-empty string');
+  if (process.env.NODE_ENV === 'test') {
+    jwtSecret = 'test-secret';
+  } else {
+    throw new Error('JWT_SECRET must be a non-empty string');
+  }
 }
 
 export let authService: AuthService;
