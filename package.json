@@ -1,5 +1,5 @@
 {
-  "name": "send-track-api",
+  "name": "spend-track-api",
   "version": "1.0.0",
   "description": "API to track all your expenses efficiently and effectively.",
   "main": "dist/src/index.js",
@@ -19,14 +19,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://matiasmorons@github.com/matiasmoron/send-track-api.git"
+    "url": "git+https://matiasmorons@github.com/matiasmoron/spend-track-api.git"
   },
   "author": "Matías Morón",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/matiasmoron/send-track-api/issues"
+    "url": "https://github.com/matiasmoron/spend-track-api/issues"
   },
-  "homepage": "https://github.com/matiasmoron/send-track-api#readme",
+  "homepage": "https://github.com/matiasmoron/spend-track-api#readme",
   "dependencies": {
     "bcrypt": "5.1.1",
     "class-transformer": "0.5.1",
@@ -36,7 +36,6 @@
     "dotenv": "16.4.7",
     "express": "4.21.2",
     "jsonwebtoken": "9.0.2",
-    "mysql2": "3.14.0",
     "openai": "4.91.1",
     "pg": "8.14.1",
     "reflect-metadata": "0.2.2",
@@ -47,6 +46,7 @@
     "@commitlint/config-conventional": "18.4.3",
     "@eslint/js": "9.23.0",
     "@types/bcrypt": "5.0.2",
+    "@types/cors": "^2.8.19",
     "@types/express": "5.0.1",
     "@types/jest": "29.5.14",
     "@types/jsonwebtoken": "9.0.9",
