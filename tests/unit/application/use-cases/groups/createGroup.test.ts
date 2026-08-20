@@ -13,6 +13,7 @@ const mockGroupRepository: jest.Mocked<GroupRepository> = {
 const mockUserGroupRepository: jest.Mocked<UserGroupRepository> = {
   addUserToGroup: jest.fn(),
   findByGroupId: jest.fn(),
+  findByGroupIds: jest.fn(),
   findByUserId: jest.fn(),
   getUserGroups: jest.fn(),
   isUserInGroup: jest.fn(),

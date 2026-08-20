@@ -35,6 +35,7 @@ describe('updateExpense use-case', () => {
     const mockExpenseRepo: jest.Mocked<ExpenseRepository> = {
       create: jest.fn(),
       findByGroupId: jest.fn(),
+      findByGroupIds: jest.fn(),
       findById: jest.fn().mockResolvedValue(existingExpense),
       update: jest
         .fn()
@@ -48,6 +49,7 @@ describe('updateExpense use-case', () => {
       findByGroupId: jest
         .fn()
         .mockResolvedValue([{ groupId: group.id, userId: user.id, userName: user.name } as any]),
+      findByGroupIds: jest.fn(),
       findByUserId: jest.fn().mockResolvedValue([{ groupId: group.id, userId: user.id } as any]),
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),
@@ -80,6 +82,7 @@ describe('updateExpense use-case', () => {
     const mockExpenseRepo: jest.Mocked<ExpenseRepository> = {
       create: jest.fn(),
       findByGroupId: jest.fn(),
+      findByGroupIds: jest.fn(),
       findById: jest.fn().mockResolvedValue(null),
       update: jest.fn(),
       delete: jest.fn(),
@@ -88,6 +91,7 @@ describe('updateExpense use-case', () => {
     const mockUserGroupRepo: jest.Mocked<UserGroupRepository> = {
       addUserToGroup: jest.fn(),
       findByGroupId: jest.fn(),
+      findByGroupIds: jest.fn(),
       findByUserId: jest.fn(),
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),

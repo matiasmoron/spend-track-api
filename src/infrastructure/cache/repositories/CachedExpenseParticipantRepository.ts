@@ -23,4 +23,9 @@ export class CachedExpenseParticipantRepository implements ExpenseParticipantRep
     await this.cache.set(key, participants);
     return participants;
   }
+
+  async findByExpenseIds(expenseIds: number[]): Promise<ExpenseParticipant[]> {
+    // Multi-expense batch lookup — not heavily read, delegate without caching
+    return this.repo.findByExpenseIds(expenseIds);
+  }
 }

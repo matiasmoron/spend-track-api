@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import {
   Expense,
   ExpenseParticipant,
@@ -17,6 +17,19 @@ export class ExpenseParticipantRepositoryImpl implements ExpenseParticipantRepos
 
   create(_expense: Expense, _participants: ExpenseParticipant[]): Promise<Expense> {
     throw new Error('Method not implemented.');
+  }
+
+  async findByExpenseIds(expenseIds: number[]): Promise<ExpenseParticipant[]> {
+    if (expenseIds.length === 0) return [];
+    const records = await this.ormRepo.find({ where: { expenseId: In(expenseIds) } });
+    return records.map(
+      (r) =>
+        new ExpenseParticipant(<ExpenseParticipantProps>{
+          expenseId: r.expenseId,
+          userId: r.userId,
+          amount: r.amount,
+        })
+    );
   }
 
   /**

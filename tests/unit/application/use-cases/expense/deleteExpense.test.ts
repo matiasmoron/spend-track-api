@@ -22,6 +22,7 @@ describe('deleteExpense use-case', () => {
     const mockExpenseRepo: jest.Mocked<ExpenseRepository> = {
       create: jest.fn(),
       findByGroupId: jest.fn(),
+      findByGroupIds: jest.fn(),
       findById: jest.fn().mockResolvedValue({ ...expense, groupId: group.id } as any),
       update: jest.fn(),
       delete: jest.fn().mockResolvedValue(undefined),
@@ -30,6 +31,7 @@ describe('deleteExpense use-case', () => {
     const mockUserGroupRepo: jest.Mocked<UserGroupRepository> = {
       addUserToGroup: jest.fn(),
       findByGroupId: jest.fn(),
+      findByGroupIds: jest.fn(),
       findByUserId: jest.fn().mockResolvedValue([{ groupId: group.id, userId: user.id } as any]),
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),
@@ -51,6 +53,7 @@ describe('deleteExpense use-case', () => {
     const mockExpenseRepo: jest.Mocked<ExpenseRepository> = {
       create: jest.fn(),
       findByGroupId: jest.fn(),
+      findByGroupIds: jest.fn(),
       findById: jest.fn().mockResolvedValue(null),
       update: jest.fn(),
       delete: jest.fn(),
@@ -59,6 +62,7 @@ describe('deleteExpense use-case', () => {
     const mockUserGroupRepo: jest.Mocked<UserGroupRepository> = {
       addUserToGroup: jest.fn(),
       findByGroupId: jest.fn(),
+      findByGroupIds: jest.fn(),
       findByUserId: jest.fn(),
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),

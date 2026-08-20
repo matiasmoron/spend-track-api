@@ -30,6 +30,11 @@ export class CachedExpenseRepository implements ExpenseRepository {
     return expenses;
   }
 
+  async findByGroupIds(groupIds: number[]): Promise<Expense[]> {
+    // Multi-group batch lookup — not heavily read, delegate without caching
+    return this.repo.findByGroupIds(groupIds);
+  }
+
   async findById(id: number): Promise<Expense | null> {
     // Single expense lookup is infrequent — delegate to real repo
     return this.repo.findById(id);

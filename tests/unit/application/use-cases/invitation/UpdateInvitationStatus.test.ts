@@ -24,6 +24,7 @@ describe('UpdateInvitationStatus', () => {
     mockUserGroupRepository = {
       addUserToGroup: jest.fn(),
       findByGroupId: jest.fn(),
+      findByGroupIds: jest.fn(),
       findByUserId: jest.fn(),
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),

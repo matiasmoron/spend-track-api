@@ -27,6 +27,11 @@ export class CachedUserGroupRepository implements UserGroupRepository {
     return members;
   }
 
+  async findByGroupIds(groupIds: number[]): Promise<UserGroupWithUserName[]> {
+    // Multi-group batch lookup — not heavily read, delegate without caching
+    return this.repo.findByGroupIds(groupIds);
+  }
+
   async findByUserId(userId: number): Promise<UserGroup[]> {
     // Not heavily read — delegate to real repo without caching
     return this.repo.findByUserId(userId);
