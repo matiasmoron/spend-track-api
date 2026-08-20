@@ -4,6 +4,7 @@ import { deleteGroup } from '../../../application/use-cases/group/DeleteGroup';
 import { getGroupById } from '../../../application/use-cases/group/GetGroupById';
 import { getGroupMembers } from '../../../application/use-cases/group/GetGroupMembers';
 import { getGroupsByUser } from '../../../application/use-cases/group/GetGroupsByUser';
+import { getGroupsSummary } from '../../../application/use-cases/group/GetGroupsSummary';
 import {
   expenseParticipantRepository,
   expenseRepository,
@@ -43,6 +44,19 @@ export class GroupController {
     try {
       const { id: userId } = req.user;
       const result = await getGroupsByUser({ userId }, groupRepository);
+      BaseResponse.success(res, result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getSummary(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { id: userId } = req.user;
+      const result = await getGroupsSummary(
+        { userId },
+        { groupRepository, userGroupRepository, expenseRepository, expenseParticipantRepository }
+      );
       BaseResponse.success(res, result);
     } catch (error) {
       next(error);

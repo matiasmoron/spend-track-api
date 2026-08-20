@@ -16,6 +16,7 @@ const mockGroupRepository: jest.Mocked<GroupRepository> = {
 const mockUserGroupRepository: jest.Mocked<UserGroupRepository> = {
   addUserToGroup: jest.fn(),
   findByGroupId: jest.fn(),
+  findByGroupIds: jest.fn(),
   findByUserId: jest.fn(),
   getUserGroups: jest.fn(),
   isUserInGroup: jest.fn(),
@@ -25,6 +26,7 @@ const mockUserGroupRepository: jest.Mocked<UserGroupRepository> = {
 const mockExpenseRepository: jest.Mocked<ExpenseRepository> = {
   create: jest.fn(),
   findByGroupId: jest.fn(),
+  findByGroupIds: jest.fn(),
   findById: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
@@ -33,6 +35,7 @@ const mockExpenseRepository: jest.Mocked<ExpenseRepository> = {
 const mockExpenseParticipantRepository: jest.Mocked<ExpenseParticipantRepository> = {
   create: jest.fn(),
   findByExpenseId: jest.fn(),
+  findByExpenseIds: jest.fn(),
 };
 
 describe('getGroupById', () => {

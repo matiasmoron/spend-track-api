@@ -21,6 +21,7 @@ describe('getExpensesByGroup use-case', () => {
     const mockExpenseRepo: jest.Mocked<ExpenseRepository> = {
       create: jest.fn(),
       findByGroupId: jest.fn().mockResolvedValue([expense]),
+      findByGroupIds: jest.fn(),
       findById: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
@@ -29,6 +30,7 @@ describe('getExpensesByGroup use-case', () => {
     const mockParticipantRepo: jest.Mocked<ExpenseParticipantRepository> = {
       create: jest.fn(),
       findByExpenseId: jest.fn().mockResolvedValue([participant]),
+      findByExpenseIds: jest.fn(),
     };
 
     const result = await getExpensesByGroup(
