@@ -1,10 +1,10 @@
-import { AppError } from '../../../application/errors/AppError';
-import { Expense } from '../../../domain/entities/expense/Expense';
-import { ExpenseParticipant } from '../../../domain/entities/expense/ExpenseParticipant';
-import { ExpenseRepository } from '../../../domain/repositories/expense/ExpenseRepository';
-import { UserGroupRepository } from '../../../domain/repositories/group/UserGroupRepository';
-import { Currency } from '../../../domain/value-objects/Currency';
-import { getGroupMembers } from '../group/GetGroupMembers';
+import { AppError } from '@/application/errors/AppError';
+import { getGroupMembers } from '@/application/use-cases/group/GetGroupMembers';
+import { Expense } from '@/domain/entities/expense/Expense';
+import { ExpenseParticipant } from '@/domain/entities/expense/ExpenseParticipant';
+import { ExpenseRepository } from '@/domain/repositories/expense/ExpenseRepository';
+import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
+import { Currency } from '@/domain/value-objects/Currency';
 
 export interface UpdateExpenseInput {
   expenseId: number;

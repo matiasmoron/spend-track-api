@@ -1,7 +1,7 @@
-import { UserProps } from '../../../domain/entities/user';
-import { UserRepository } from '../../../domain/repositories/user/UserRepository';
-import { AuthService } from '../../../infrastructure/database/services/AuthService';
-import { AppError } from '../../errors/AppError';
+import { AppError } from '@/application/errors/AppError';
+import { UserProps } from '@/domain/entities/user';
+import { UserRepository } from '@/domain/repositories/user/UserRepository';
+import { AuthService } from '@/infrastructure/database/services/AuthService';
 
 type LoginInput = Pick<UserProps, 'email' | 'password'>;
 

@@ -20,6 +20,23 @@ export class UserGroupRepoImpl implements UserGroupRepository {
     return await this.repository.findBy({ userId });
   }
 
+  async findByGroupIds(groupIds: number[]): Promise<UserGroupWithUserName[]> {
+    if (groupIds.length === 0) return [];
+    return await this.repository
+      .createQueryBuilder('ug')
+      .innerJoin('users', 'u', 'ug.userId = u.id')
+      .select([
+        'ug.id         AS "id"',
+        'ug.userId    AS "userId"',
+        'ug.groupId   AS "groupId"',
+        'ug.created_at AS "createdAt"',
+        'ug.updated_at AS "updatedAt"',
+        'u.name        AS "userName"',
+      ])
+      .where('ug.groupId IN (:...groupIds)', { groupIds })
+      .getRawMany();
+  }
+
   async findByGroupId(groupId: number): Promise<UserGroupWithUserName[]> {
     return await this.repository
       .createQueryBuilder('ug')

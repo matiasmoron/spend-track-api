@@ -1,6 +1,6 @@
-import { GroupMemberInfo } from '../../../domain/entities/group';
-import { Currency } from '../../../domain/value-objects';
-import { ExpenseDetail } from '../expense/GetExpensesByGroup';
+import { ExpenseDetail } from '@/application/use-cases/expense/GetExpensesByGroup';
+import { GroupMemberInfo } from '@/domain/entities/group';
+import { Currency } from '@/domain/value-objects';
 
 export interface ParticipantShare {
   userId: number;

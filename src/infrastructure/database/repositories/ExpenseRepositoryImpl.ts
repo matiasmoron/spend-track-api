@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Expense } from '../../../domain/entities/expense/Expense';
 import { ExpenseParticipant } from '../../../domain/entities/expense/ExpenseParticipant';
 import { ExpenseRepository } from '../../../domain/repositories/expense/ExpenseRepository';
@@ -41,6 +41,26 @@ export class ExpenseRepositoryImpl implements ExpenseRepository {
         id: savedExpense.id,
       });
     });
+  }
+
+  async findByGroupIds(groupIds: number[]): Promise<Expense[]> {
+    if (groupIds.length === 0) return [];
+    const records = await this.ormRepo.find({
+      where: { groupId: In(groupIds) },
+      order: { createdAt: 'DESC' },
+    });
+    return records.map(
+      (r) =>
+        new Expense({
+          id: r.id,
+          groupId: r.groupId,
+          description: r.description,
+          total: r.total,
+          currency: r.currency,
+          createdAt: r.createdAt,
+          updatedAt: r.updatedAt,
+        })
+    );
   }
 
   /**

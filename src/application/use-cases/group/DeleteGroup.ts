@@ -1,6 +1,6 @@
-import { AppError } from '../../../application/errors/AppError';
-import { GroupRepository } from '../../../domain/repositories/group/GroupRepository';
-import { UserGroupRepository } from '../../../domain/repositories/group/UserGroupRepository';
+import { AppError } from '@/application/errors/AppError';
+import { GroupRepository } from '@/domain/repositories/group/GroupRepository';
+import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
 
 export interface DeleteGroupInput {
   groupId: number;

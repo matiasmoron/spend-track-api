@@ -1,5 +1,5 @@
-import { Invitation } from '../../../domain/entities/invitation/Invitation';
-import { InvitationRepository } from '../../../domain/repositories/invitation/InvitationRepository';
+import { Invitation } from '@/domain/entities/invitation/Invitation';
+import { InvitationRepository } from '@/domain/repositories/invitation/InvitationRepository';
 
 export async function getUserInvitations(
   invitationRepository: InvitationRepository,

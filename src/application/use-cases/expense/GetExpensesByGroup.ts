@@ -1,7 +1,7 @@
-import { ExpenseParticipant } from '../../../domain/entities/expense';
-import { ExpenseParticipantRepository } from '../../../domain/repositories/expense/ExpenseParticipantRepository';
-import { ExpenseRepository } from '../../../domain/repositories/expense/ExpenseRepository';
-import { Currency } from '../../../domain/value-objects';
+import { ExpenseParticipant } from '@/domain/entities/expense';
+import { ExpenseParticipantRepository } from '@/domain/repositories/expense/ExpenseParticipantRepository';
+import { ExpenseRepository } from '@/domain/repositories/expense/ExpenseRepository';
+import { Currency } from '@/domain/value-objects';
 
 export interface ExpenseDetail {
   id: number;

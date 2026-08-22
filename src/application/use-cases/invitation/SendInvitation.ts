@@ -1,9 +1,9 @@
-import { AppError } from '../../../application/errors/AppError';
-import { Invitation } from '../../../domain/entities/invitation/Invitation';
-import { InvitationStatus } from '../../../domain/entities/invitation/Invitation';
-import { UserGroupRepository } from '../../../domain/repositories/group/UserGroupRepository';
-import { InvitationRepository } from '../../../domain/repositories/invitation/InvitationRepository';
-import { UserRepository } from '../../../domain/repositories/user/UserRepository';
+import { AppError } from '@/application/errors/AppError';
+import { Invitation } from '@/domain/entities/invitation/Invitation';
+import { InvitationStatus } from '@/domain/entities/invitation/Invitation';
+import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
+import { InvitationRepository } from '@/domain/repositories/invitation/InvitationRepository';
+import { UserRepository } from '@/domain/repositories/user/UserRepository';
 
 export interface SendInvitationInput {
   groupId: number;
