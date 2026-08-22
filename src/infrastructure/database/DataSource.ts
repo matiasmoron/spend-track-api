@@ -21,7 +21,7 @@ const entities = [
 const sharedOptions = {
   type: 'postgres' as const,
   synchronize: true,
-  ssl: { rejectUnauthorized: false },
+  ssl: { rejectUnauthorized: true, ca: process.env.DB_SSL_CA },
   entities,
 };
 
