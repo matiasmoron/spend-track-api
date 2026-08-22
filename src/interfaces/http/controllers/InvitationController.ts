@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import { getUserInvitations } from '../../../application/use-cases/invitation/GetUserInvitations';
 import { sendInvitation } from '../../../application/use-cases/invitation/SendInvitation';
 import { updateInvitationStatus } from '../../../application/use-cases/invitation/UpdateInvitationStatus';
-import { invitationRepository, userGroupRepository } from '../../../config/di';
+import { invitationRepository, userGroupRepository, userRepository } from '../../../config/di';
 import { AuthenticatedRequest } from '../../../interfaces/http/types/AuthenticatedRequest';
 import { BaseResponse } from '../../../interfaces/http/utils/BaseResponse';
 import { UpdateInvitationStatusDTO } from '../../../interfaces/validators/invitation/UpdateInvitationStatusDTO';
@@ -14,11 +14,17 @@ export class InvitationController {
     try {
       const dto = await validateDTO(CreateInvitationDTO, req.body);
 
-      const result = await sendInvitation(invitationRepository, userGroupRepository, {
-        groupId: dto.groupId,
-        invitedUserId: dto.invitedUserId,
-        invitedById: req.user.id,
-      });
+      const result = await sendInvitation(
+        invitationRepository,
+        userGroupRepository,
+        userRepository,
+        {
+          groupId: dto.groupId,
+          invitedById: req.user.id,
+          invitedUserEmail: dto.invitedUserEmail,
+          invitedUserId: dto.invitedUserId,
+        }
+      );
 
       return BaseResponse.success(res, result, 201);
     } catch (error) {

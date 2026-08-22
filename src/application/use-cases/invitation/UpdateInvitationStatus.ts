@@ -1,7 +1,7 @@
-import { AppError } from '../../../application/errors';
-import { InvitationStatus } from '../../../domain/entities/invitation/Invitation';
-import { UserGroupRepository } from '../../../domain/repositories/group/UserGroupRepository';
-import { InvitationRepository } from '../../../domain/repositories/invitation/InvitationRepository';
+import { AppError } from '@/application/errors';
+import { InvitationStatus } from '@/domain/entities/invitation/Invitation';
+import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
+import { InvitationRepository } from '@/domain/repositories/invitation/InvitationRepository';
 
 export interface UpdateInvitationInput {
   id: number;

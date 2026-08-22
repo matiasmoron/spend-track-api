@@ -2,3 +2,5 @@ node_modules
 .qodo
 .env
 dist/*
+coverage/**
+*.db

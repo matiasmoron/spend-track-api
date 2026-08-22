@@ -9,35 +9,43 @@ import { UserModel } from './models/UserModel';
 
 dotenv.config();
 
-class Database {
-  private static _instance: DataSource;
+const entities = [
+  UserModel,
+  GroupModel,
+  UserGroupModel,
+  ExpenseModel,
+  ExpenseParticipantModel,
+  InvitationModel,
+];
 
-  static getInstance(): DataSource {
-    if (!Database._instance) {
-      Database._instance = new DataSource({
-        type: 'postgres',
-        host: process.env.DB_HOST || 'localhost',
-        port: Number(process.env.DB_PORT) || 3306,
-        username: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD || '',
-        database: process.env.DB_NAME || '',
-        entities: [
-          UserModel,
-          GroupModel,
-          UserGroupModel,
-          ExpenseModel,
-          ExpenseParticipantModel,
-          InvitationModel,
-        ],
-        synchronize: true, // o false si usás migraciones
-        ssl: {
-          rejectUnauthorized: false, // Render requiere SSL pero sin verificación estricta
-        },
-      });
-    }
+const sharedOptions = {
+  type: 'postgres' as const,
+  synchronize: true,
+  ssl: { rejectUnauthorized: false },
+  entities,
+};
 
-    return Database._instance;
-  }
+function getRailwayConnectionOptions() {
+  return { url: process.env.DATABASE_URL };
 }
 
-export const AppDataSource = Database.getInstance();
+function getSupabaseConnectionOptions() {
+  return {
+    host: process.env.DB_HOST || 'aws-1-us-east-1.pooler.supabase.com',
+    port: Number(process.env.DB_PORT) || 3306,
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || '',
+  };
+}
+
+function buildDataSourceOptions() {
+  const connectionOptions =
+    process.env.USE_RAILWAY_DB_CONNECTION?.toLowerCase() === 'true'
+      ? getRailwayConnectionOptions()
+      : getSupabaseConnectionOptions();
+
+  return { ...sharedOptions, ...connectionOptions };
+}
+
+export const AppDataSource = new DataSource(buildDataSourceOptions());

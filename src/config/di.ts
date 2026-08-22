@@ -2,6 +2,15 @@
 // and register your services, repositories, etc.
 
 import dotenv from 'dotenv';
+import { ExpenseParticipantRepository } from '../domain/repositories/expense/ExpenseParticipantRepository';
+import { ExpenseRepository } from '../domain/repositories/expense/ExpenseRepository';
+import { GroupRepository } from '../domain/repositories/group/GroupRepository';
+import { UserGroupRepository } from '../domain/repositories/group/UserGroupRepository';
+import { CacheService } from '../infrastructure/cache/CacheService';
+import { CachedExpenseParticipantRepository } from '../infrastructure/cache/repositories/CachedExpenseParticipantRepository';
+import { CachedExpenseRepository } from '../infrastructure/cache/repositories/CachedExpenseRepository';
+import { CachedGroupRepository } from '../infrastructure/cache/repositories/CachedGroupRepository';
+import { CachedUserGroupRepository } from '../infrastructure/cache/repositories/CachedUserGroupRepository';
 import { ExpenseParticipantRepositoryImpl } from '../infrastructure/database/repositories/ExpenseParticipantRepositoryImpl';
 import { ExpenseRepositoryImpl } from '../infrastructure/database/repositories/ExpenseRepositoryImpl';
 import { GroupRepoImpl } from '../infrastructure/database/repositories/GroupRepoImpl';
@@ -24,28 +33,47 @@ if (typeof jwtSecret !== 'string' || jwtSecret.trim() === '') {
 }
 
 export let authService: AuthService;
-export let expenseRepository: ExpenseRepositoryImpl;
-export let expenseParticipantRepository: ExpenseParticipantRepositoryImpl;
-export let groupRepository: GroupRepoImpl;
+export let expenseRepository: ExpenseRepository;
+export let expenseParticipantRepository: ExpenseParticipantRepository;
+export let groupRepository: GroupRepository;
 export let invitationRepository: InvitationRepositoryImpl;
-export let userGroupRepository: UserGroupRepoImpl;
+export let userGroupRepository: UserGroupRepository;
 export let userRepository: UserRepoImpl;
+export let cacheService: CacheService | null = null;
 
-const initInstances = () => {
+const initInstances = (cache: CacheService | null) => {
   authService = new AuthService(jwtSecret);
-  expenseRepository = new ExpenseRepositoryImpl();
-  expenseParticipantRepository = new ExpenseParticipantRepositoryImpl();
-  groupRepository = new GroupRepoImpl();
+
+  const rawExpenseRepo = new ExpenseRepositoryImpl();
+  const rawExpenseParticipantRepo = new ExpenseParticipantRepositoryImpl();
+  const rawGroupRepo = new GroupRepoImpl();
+  const rawUserGroupRepo = new UserGroupRepoImpl();
+
+  if (cache) {
+    expenseRepository = new CachedExpenseRepository(rawExpenseRepo, cache);
+    expenseParticipantRepository = new CachedExpenseParticipantRepository(
+      rawExpenseParticipantRepo,
+      cache
+    );
+    groupRepository = new CachedGroupRepository(rawGroupRepo, cache);
+    userGroupRepository = new CachedUserGroupRepository(rawUserGroupRepo, cache);
+  } else {
+    expenseRepository = rawExpenseRepo;
+    expenseParticipantRepository = rawExpenseParticipantRepo;
+    groupRepository = rawGroupRepo;
+    userGroupRepository = rawUserGroupRepo;
+  }
+
   invitationRepository = new InvitationRepositoryImpl();
-  userGroupRepository = new UserGroupRepoImpl();
   userRepository = new UserRepoImpl();
 };
 
 // Initialize the instances and the database
-export const initDI = async () => {
+export const initDI = async (cache: CacheService | null = null) => {
+  cacheService = cache;
   const dataSourceInstance = await initDB();
 
-  initInstances();
+  initInstances(cache);
 
   return {
     dataSourceInstance,

@@ -6,6 +6,7 @@ const groupController = new GroupController();
 const groupRouter = Router();
 
 groupRouter.post('/create', authenticateJWT, groupController.create.bind(groupController));
+groupRouter.get('/summary', authenticateJWT, groupController.getSummary.bind(groupController));
 groupRouter.get('/:groupId', authenticateJWT, groupController.getDetailsById.bind(groupController));
 groupRouter.get(
   '/:groupId/members',
@@ -13,5 +14,6 @@ groupRouter.get(
   groupController.getGroupMembers.bind(groupController)
 );
 groupRouter.get('/', authenticateJWT, groupController.getByUser.bind(groupController));
+groupRouter.delete('/:groupId', authenticateJWT, groupController.delete.bind(groupController));
 
 export default groupRouter;
