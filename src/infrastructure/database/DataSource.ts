@@ -31,8 +31,8 @@ function getRailwayConnectionOptions() {
 
 function getSupabaseConnectionOptions() {
   return {
-    host: process.env.DB_HOST || 'aws-1-us-east-1.pooler.supabase.com',
-    port: Number(process.env.DB_PORT) || 3306,
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT) || 5432,
     username: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || '',
