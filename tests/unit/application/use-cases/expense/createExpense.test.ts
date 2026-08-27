@@ -30,6 +30,7 @@ describe('createExpense use-case', () => {
       paidBy: [{ userId: user.id, amount: 100 }],
       splits: [{ userId: user.id, amount: 100 }],
       createdAt: new Date('2023-01-01T00:00:00.000Z'),
+      clientRequestId: '11111111-1111-4111-8111-111111111111',
     };
 
     const mockExpenseRepo: jest.Mocked<ExpenseRepository> = {
@@ -75,6 +76,9 @@ describe('createExpense use-case', () => {
     expect(mockExpenseRepo.create).toHaveBeenCalled();
     expect(result.id).toBe(1);
     expect(result.createdAt.toISOString()).toBe('2023-01-01T00:00:00.000Z');
+
+    const [createdExpense] = mockExpenseRepo.create.mock.calls[0];
+    expect(createdExpense.clientRequestId).toBe(input.clientRequestId);
   });
 
   it('throws if paidBy user not in group', async () => {
@@ -88,6 +92,7 @@ describe('createExpense use-case', () => {
       currency: 'ARS' as Currency,
       paidBy: [{ userId: 9999, amount: 100 }],
       splits: [{ userId: user.id, amount: 100 }],
+      clientRequestId: '22222222-2222-4222-8222-222222222222',
     };
 
     const mockExpenseRepo: jest.Mocked<ExpenseRepository> = {

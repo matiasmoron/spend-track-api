@@ -14,6 +14,7 @@ export interface CreateExpenseInput {
   paidBy: { userId: number; amount: number }[];
   splits: { userId: number; amount: number }[];
   createdAt?: Date;
+  clientRequestId: string;
 }
 
 const validateAllUsersBelongToGroup = (
@@ -32,7 +33,8 @@ export async function createExpense(
 ): Promise<Expense> {
   const { expenseRepository, userGroupRepository } = deps;
 
-  const { groupId, description, total, currency, paidBy, splits, userId, createdAt } = input;
+  const { groupId, description, total, currency, paidBy, splits, userId, createdAt, clientRequestId } =
+    input;
 
   const totalPaid = paidBy.reduce((sum, p) => sum + p.amount, 0);
   const totalSplit = splits.reduce((sum, s) => sum + s.amount, 0);
@@ -67,6 +69,7 @@ export async function createExpense(
     total,
     currency,
     createdAt: expenseCreatedAt,
+    clientRequestId,
   });
 
   const participants: ExpenseParticipant[] = [

@@ -8,6 +8,7 @@ export interface ExpenseProps {
   currency: Currency;
   createdAt: Date;
   updatedAt?: Date;
+  clientRequestId?: string;
 }
 
 export class Expense {
@@ -18,6 +19,7 @@ export class Expense {
   readonly currency: Currency;
   readonly createdAt: Date;
   readonly updatedAt: Date;
+  readonly clientRequestId?: string;
 
   constructor(props: ExpenseProps) {
     this.id = props.id;
@@ -27,5 +29,6 @@ export class Expense {
     this.currency = props.currency;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
+    this.clientRequestId = props.clientRequestId;
   }
 }
