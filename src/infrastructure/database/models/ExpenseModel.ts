@@ -6,11 +6,15 @@ import {
   ManyToOne,
   JoinColumn,
   UpdateDateColumn,
+  Unique,
 } from 'typeorm';
 import { Currency } from '../../../domain/value-objects';
 import { GroupModel } from './GroupModel';
 
+export const EXPENSE_CLIENT_REQUEST_ID_CONSTRAINT = 'UQ_expenses_client_request_id';
+
 @Entity('expenses')
+@Unique(EXPENSE_CLIENT_REQUEST_ID_CONSTRAINT, ['clientRequestId'])
 export class ExpenseModel {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -30,6 +34,9 @@ export class ExpenseModel {
 
   @Column({ type: 'enum', enum: Currency })
   currency!: Currency;
+
+  @Column({ name: 'client_request_id', type: 'uuid', nullable: true })
+  clientRequestId?: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
