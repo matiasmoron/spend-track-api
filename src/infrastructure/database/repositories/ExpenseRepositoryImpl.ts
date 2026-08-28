@@ -1,10 +1,25 @@
-import { In, Repository } from 'typeorm';
+import { In, QueryFailedError, Repository } from 'typeorm';
 import { Expense } from '../../../domain/entities/expense/Expense';
 import { ExpenseParticipant } from '../../../domain/entities/expense/ExpenseParticipant';
 import { ExpenseRepository } from '../../../domain/repositories/expense/ExpenseRepository';
 import { AppDataSource } from '../../../infrastructure/database/DataSource';
-import { ExpenseModel } from '../../../infrastructure/database/models/ExpenseModel';
+import {
+  EXPENSE_CLIENT_REQUEST_ID_CONSTRAINT,
+  ExpenseModel,
+} from '../../../infrastructure/database/models/ExpenseModel';
 import { ExpenseParticipantModel } from '../../../infrastructure/database/models/ExpenseParticipantModel';
+
+const POSTGRES_UNIQUE_VIOLATION = '23505';
+
+function isClientRequestIdConflict(error: unknown): boolean {
+  if (!(error instanceof QueryFailedError)) return false;
+  const driverError = (error as QueryFailedError & { driverError?: { code?: string; constraint?: string } })
+    .driverError;
+  return (
+    driverError?.code === POSTGRES_UNIQUE_VIOLATION &&
+    driverError?.constraint === EXPENSE_CLIENT_REQUEST_ID_CONSTRAINT
+  );
+}
 
 export class ExpenseRepositoryImpl implements ExpenseRepository {
   private ormRepo: Repository<ExpenseModel>;
@@ -14,32 +29,65 @@ export class ExpenseRepositoryImpl implements ExpenseRepository {
   }
 
   async create(expense: Expense, participants: ExpenseParticipant[]): Promise<Expense> {
-    return await AppDataSource.transaction(async (manager) => {
-      const expenseRepo = manager.getRepository(ExpenseModel);
-      const participantRepo = manager.getRepository(ExpenseParticipantModel);
+    if (expense.clientRequestId) {
+      const existing = await this.ormRepo.findOneBy({ clientRequestId: expense.clientRequestId });
+      if (existing) {
+        return this.toDomainExpense(existing);
+      }
+    }
 
-      const savedExpense = await expenseRepo.save({
-        groupId: expense.groupId,
-        description: expense.description,
-        total: expense.total,
-        currency: expense.currency,
-        createdAt: expense.createdAt,
+    try {
+      return await AppDataSource.transaction(async (manager) => {
+        const expenseRepo = manager.getRepository(ExpenseModel);
+        const participantRepo = manager.getRepository(ExpenseParticipantModel);
+
+        const savedExpense = await expenseRepo.save({
+          groupId: expense.groupId,
+          description: expense.description,
+          total: expense.total,
+          currency: expense.currency,
+          createdAt: expense.createdAt,
+          clientRequestId: expense.clientRequestId,
+        });
+
+        const participantEntities = participants.map((p) =>
+          participantRepo.create({
+            expenseId: savedExpense.id,
+            userId: p.userId,
+            amount: p.amount,
+          })
+        );
+
+        await participantRepo.save(participantEntities);
+
+        return new Expense({
+          ...expense,
+          id: savedExpense.id,
+        });
       });
+    } catch (error) {
+      // AppDataSource.transaction() has already rolled back by the time we get here,
+      // so this fallback lookup runs on a fresh, non-transactional connection.
+      if (isClientRequestIdConflict(error) && expense.clientRequestId) {
+        const winner = await this.ormRepo.findOneBy({ clientRequestId: expense.clientRequestId });
+        if (winner) {
+          return this.toDomainExpense(winner);
+        }
+      }
+      throw error;
+    }
+  }
 
-      const participantEntities = participants.map((p) =>
-        participantRepo.create({
-          expenseId: savedExpense.id,
-          userId: p.userId,
-          amount: p.amount,
-        })
-      );
-
-      await participantRepo.save(participantEntities);
-
-      return new Expense({
-        ...expense,
-        id: savedExpense.id,
-      });
+  private toDomainExpense(record: ExpenseModel): Expense {
+    return new Expense({
+      id: record.id,
+      groupId: record.groupId,
+      description: record.description,
+      total: record.total,
+      currency: record.currency,
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+      clientRequestId: record.clientRequestId,
     });
   }
 

@@ -9,6 +9,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  IsUUID,
   MinLength,
   ValidateNested,
 } from 'class-validator';
@@ -57,4 +58,8 @@ export class CreateExpenseDTO {
   @IsDate({ message: 'CreatedAt must be a valid date' })
   @Type(() => Date)
   createdAt?: Date;
+
+  @IsNotEmpty({ message: 'Client request ID is required' })
+  @IsUUID('4', { message: 'Client request ID must be a valid UUID' })
+  clientRequestId!: string;
 }
