@@ -1,4 +1,5 @@
 import { NextFunction, Response } from 'express';
+import { addGuestMember } from '../../../application/use-cases/group/AddGuestMember';
 import { createGroup } from '../../../application/use-cases/group/CreateGroup';
 import { deleteGroup } from '../../../application/use-cases/group/DeleteGroup';
 import { getGroupById } from '../../../application/use-cases/group/GetGroupById';
@@ -6,12 +7,16 @@ import { getGroupMembers } from '../../../application/use-cases/group/GetGroupMe
 import { getGroupsByUser } from '../../../application/use-cases/group/GetGroupsByUser';
 import { getGroupsSummary } from '../../../application/use-cases/group/GetGroupsSummary';
 import {
+  authService,
   expenseParticipantRepository,
   expenseRepository,
   groupRepository,
+  invitationRepository,
   userGroupRepository,
+  userRepository,
 } from '../../../config/di';
 import {
+  AddGuestMemberDTO,
   CreateGroupDTO,
   DeleteGroupDTO,
   GetGroupDetailsDTO,
@@ -102,6 +107,36 @@ export class GroupController {
       });
 
       BaseResponse.success(res, result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async addGuestMember(
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const dto = await validateDTO(AddGuestMemberDTO, {
+        ...req.body,
+        groupId: Number(req.params.groupId),
+      });
+
+      const result = await addGuestMember(
+        invitationRepository,
+        userGroupRepository,
+        userRepository,
+        authService,
+        {
+          groupId: dto.groupId,
+          name: dto.name,
+          claimEmail: dto.claimEmail,
+          addedById: req.user.id,
+        }
+      );
+
+      BaseResponse.success(res, result, 201);
     } catch (error) {
       next(error);
     }

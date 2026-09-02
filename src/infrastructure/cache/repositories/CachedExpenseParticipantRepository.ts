@@ -28,4 +28,14 @@ export class CachedExpenseParticipantRepository implements ExpenseParticipantRep
     // Multi-expense batch lookup — not heavily read, delegate without caching
     return this.repo.findByExpenseIds(expenseIds);
   }
+
+  async reassignUser(fromUserId: number, toUserId: number): Promise<number[]> {
+    const affectedExpenseIds = await this.repo.reassignUser(fromUserId, toUserId);
+    await Promise.all(
+      affectedExpenseIds.map((expenseId) =>
+        this.cache.del(cacheKeys.expenseParticipants(expenseId))
+      )
+    );
+    return affectedExpenseIds;
+  }
 }

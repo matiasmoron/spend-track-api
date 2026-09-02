@@ -22,6 +22,7 @@ describe('SendInvitation', () => {
       create: jest.fn(),
       updateStatus: jest.fn(),
       delete: jest.fn(),
+      reassignUser: jest.fn(),
     };
 
     mockUserGroupRepository = {
@@ -32,12 +33,15 @@ describe('SendInvitation', () => {
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),
       save: jest.fn(),
+      reassignUser: jest.fn(),
     };
 
     mockUserRepository = {
       save: jest.fn(),
       getByEmail: jest.fn(),
       getById: jest.fn(),
+      findGuestsByClaimEmail: jest.fn(),
+      delete: jest.fn(),
     };
   });
 

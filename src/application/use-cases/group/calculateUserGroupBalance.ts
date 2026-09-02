@@ -11,6 +11,7 @@ export interface ParticipantShare {
 export interface MemberBalanceEntry {
   userId: number;
   name: string;
+  isGuest: boolean;
   currency: Currency;
   amount: number; // positive if they owe you, negative if you owe them
 }
@@ -135,6 +136,7 @@ export const calculateUserGroupBalance = (
       memberBalances.push({
         userId: m.userId,
         name: m.name,
+        isGuest: m.isGuest,
         currency: c as Currency,
         amount: -amt, // invert sign: positive if they owe you
       });

@@ -36,6 +36,7 @@ describe('deleteExpense use-case', () => {
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),
       save: jest.fn(),
+      reassignUser: jest.fn(),
     };
 
     await deleteExpense(
@@ -67,6 +68,7 @@ describe('deleteExpense use-case', () => {
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),
       save: jest.fn(),
+      reassignUser: jest.fn(),
     };
 
     await expect(

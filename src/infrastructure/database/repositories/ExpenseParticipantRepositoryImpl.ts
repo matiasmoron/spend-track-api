@@ -47,4 +47,18 @@ export class ExpenseParticipantRepositoryImpl implements ExpenseParticipantRepos
         })
     );
   }
+
+  /**
+   * Reassigns every participant row from one user to another (used when a guest
+   * membership is claimed by a real account). Returns the affected expense ids
+   * so callers can invalidate any per-expense caches.
+   */
+  async reassignUser(fromUserId: number, toUserId: number): Promise<number[]> {
+    const affected = await this.ormRepo.find({ where: { userId: fromUserId } });
+    if (affected.length === 0) return [];
+
+    await this.ormRepo.update({ userId: fromUserId }, { userId: toUserId });
+
+    return [...new Set(affected.map((r) => r.expenseId))];
+  }
 }

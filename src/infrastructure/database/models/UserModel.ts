@@ -20,6 +20,12 @@ export class UserModel {
   @Column()
   password: string;
 
+  @Column({ name: 'is_guest', default: false })
+  isGuest: boolean;
+
+  @Column({ name: 'claim_email', nullable: true })
+  claimEmail: string | null;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

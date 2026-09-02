@@ -11,6 +11,7 @@ const mockUserGroupRepository: jest.Mocked<UserGroupRepository> = {
   getUserGroups: jest.fn(),
   isUserInGroup: jest.fn(),
   save: jest.fn(),
+  reassignUser: jest.fn(),
 };
 
 describe('getGroupMembers', () => {
@@ -29,7 +30,7 @@ describe('getGroupMembers', () => {
     const { group, user, userGroup } = testData;
 
     // Attach userName to satisfy UserGroupWithUserName type
-    const userGroupWithName = { ...userGroup, userName: user.name };
+    const userGroupWithName = { ...userGroup, userName: user.name, isGuest: false };
 
     // findByGroupId returns all members
     mockUserGroupRepository.findByGroupId.mockResolvedValue([userGroupWithName]);
@@ -44,6 +45,7 @@ describe('getGroupMembers', () => {
       {
         userId: userGroupWithName.userId,
         name: user.name,
+        isGuest: false,
       },
     ]);
   });
@@ -63,7 +65,12 @@ describe('getGroupMembers', () => {
   it('should throw 403 when user not in group', async () => {
     const { group, user } = testData;
     // group exists but user not among members
-    const differentUserGroup = { ...testData.userGroup, userId: 12345678, userName: 'Other User' };
+    const differentUserGroup = {
+      ...testData.userGroup,
+      userId: 12345678,
+      userName: 'Other User',
+      isGuest: false,
+    };
     mockUserGroupRepository.findByGroupId.mockResolvedValue([differentUserGroup]);
 
     await expect(

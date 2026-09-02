@@ -32,6 +32,7 @@ export class UserGroupRepoImpl implements UserGroupRepository {
         'ug.created_at AS "createdAt"',
         'ug.updated_at AS "updatedAt"',
         'u.name        AS "userName"',
+        'u.is_guest    AS "isGuest"',
       ])
       .where('ug.groupId IN (:...groupIds)', { groupIds })
       .getRawMany();
@@ -48,6 +49,7 @@ export class UserGroupRepoImpl implements UserGroupRepository {
         'ug.created_at AS "createdAt"',
         'ug.updated_at AS "updatedAt"',
         'u.name        AS "userName"',
+        'u.is_guest    AS "isGuest"',
       ])
       .where('ug.groupId = :groupId', { groupId })
       .getRawMany();
@@ -66,5 +68,16 @@ export class UserGroupRepoImpl implements UserGroupRepository {
   async isUserInGroup(userId: number, groupId: number): Promise<boolean> {
     const count = await this.repository.count({ where: { userId, groupId } });
     return count > 0;
+  }
+
+  async reassignUser(fromUserId: number, toUserId: number, groupId: number): Promise<void> {
+    const toUserIsAlreadyMember = await this.isUserInGroup(toUserId, groupId);
+
+    if (toUserIsAlreadyMember) {
+      await this.repository.delete({ userId: fromUserId, groupId });
+      return;
+    }
+
+    await this.repository.update({ userId: fromUserId, groupId }, { userId: toUserId });
   }
 }

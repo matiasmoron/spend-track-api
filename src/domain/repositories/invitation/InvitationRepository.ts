@@ -13,4 +13,6 @@ export interface InvitationRepository {
   updateStatus(id: number, status: InvitationStatus): Promise<void>;
 
   delete(id: number): Promise<void>;
+
+  reassignUser(fromUserId: number, toUserId: number): Promise<void>;
 }

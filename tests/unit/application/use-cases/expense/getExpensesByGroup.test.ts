@@ -31,6 +31,7 @@ describe('getExpensesByGroup use-case', () => {
       create: jest.fn(),
       findByExpenseId: jest.fn().mockResolvedValue([participant]),
       findByExpenseIds: jest.fn(),
+      reassignUser: jest.fn(),
     };
 
     const result = await getExpensesByGroup(
