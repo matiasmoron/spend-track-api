@@ -4,4 +4,6 @@ export interface UserRepository {
   save(_user: User): Promise<User>;
   getByEmail(_email: string): Promise<User | null>;
   getById(_id: number): Promise<User | null>;
+  findGuestsByClaimEmail(_claimEmail: string): Promise<User[]>;
+  delete(_id: number): Promise<void>;
 }

@@ -19,6 +19,7 @@ describe('UpdateInvitationStatus', () => {
       create: jest.fn(),
       updateStatus: jest.fn(),
       delete: jest.fn(),
+      reassignUser: jest.fn(),
     };
 
     mockUserGroupRepository = {
@@ -29,6 +30,7 @@ describe('UpdateInvitationStatus', () => {
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),
       save: jest.fn(),
+      reassignUser: jest.fn(),
     };
   });
 

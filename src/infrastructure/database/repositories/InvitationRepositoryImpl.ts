@@ -68,4 +68,9 @@ export class InvitationRepositoryImpl implements InvitationRepository {
   async delete(id: number): Promise<void> {
     await this.repository.delete(id);
   }
+
+  async reassignUser(fromUserId: number, toUserId: number): Promise<void> {
+    await this.repository.update({ invitedUserId: fromUserId }, { invitedUserId: toUserId });
+    await this.repository.update({ invitedById: fromUserId }, { invitedById: toUserId });
+  }
 }

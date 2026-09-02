@@ -8,4 +8,5 @@ export interface UserGroupRepository {
   getUserGroups(userId: number): Promise<number[]>;
   isUserInGroup(userId: number, groupId: number): Promise<boolean>;
   save(userGroup: Partial<UserGroup>): Promise<UserGroup>;
+  reassignUser(fromUserId: number, toUserId: number, groupId: number): Promise<void>;
 }
