@@ -11,42 +11,52 @@ export class UserRepoImpl implements UserRepository {
     this.ormRepo = AppDataSource.getRepository(UserModel);
   }
 
-  async save(user: User): Promise<User> {
-    const savedUser = await this.ormRepo.save({
+  private toDomainUser(user: UserModel): User {
+    return new User({
+      id: user.id,
       name: user.name,
       email: user.email,
       password: user.password,
+      isGuest: user.isGuest,
+      claimEmail: user.claimEmail,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    });
+  }
+
+  async save(user: User): Promise<User> {
+    const savedUser = await this.ormRepo.save({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      isGuest: user.isGuest,
+      claimEmail: user.claimEmail,
     });
 
-    return new User({
-      id: savedUser.id,
-      name: savedUser.name,
-      email: savedUser.email,
-      password: savedUser.password,
-    });
+    return this.toDomainUser(savedUser);
   }
 
   async getByEmail(email: string): Promise<User | null> {
     const user = await this.ormRepo.findOne({ where: { email } });
     if (!user) return null;
 
-    return new User({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-    });
+    return this.toDomainUser(user);
   }
 
   async getById(id: number): Promise<User | null> {
     const user = await this.ormRepo.findOne({ where: { id } });
     if (!user) return null;
 
-    return new User({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-    });
+    return this.toDomainUser(user);
+  }
+
+  async findGuestsByClaimEmail(claimEmail: string): Promise<User[]> {
+    const users = await this.ormRepo.find({ where: { claimEmail, isGuest: true } });
+    return users.map((user) => this.toDomainUser(user));
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.ormRepo.delete(id);
   }
 }

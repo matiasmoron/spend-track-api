@@ -13,6 +13,7 @@ describe('GetUserInvitations', () => {
       create: jest.fn(),
       updateStatus: jest.fn(),
       delete: jest.fn(),
+      reassignUser: jest.fn(),
     };
   });
 

@@ -56,4 +56,10 @@ export class CachedUserGroupRepository implements UserGroupRepository {
     }
     return saved;
   }
+
+  async reassignUser(fromUserId: number, toUserId: number, groupId: number): Promise<void> {
+    await this.repo.reassignUser(fromUserId, toUserId, groupId);
+    await this.cache.invalidatePattern(cacheKeys.groupPattern(groupId));
+    await this.cache.del(cacheKeys.userGroups(fromUserId), cacheKeys.userGroups(toUserId));
+  }
 }

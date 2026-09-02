@@ -54,6 +54,7 @@ describe('updateExpense use-case', () => {
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),
       save: jest.fn(),
+      reassignUser: jest.fn(),
     };
 
     const result = await updateExpense(input, {
@@ -96,6 +97,7 @@ describe('updateExpense use-case', () => {
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),
       save: jest.fn(),
+      reassignUser: jest.fn(),
     };
 
     await expect(

@@ -51,7 +51,7 @@ export const getGroupsSummary = async (
   const membersByGroup = new Map<number, GroupMemberInfo[]>();
   for (const ug of allMembers) {
     const list = membersByGroup.get(ug.groupId) ?? [];
-    list.push({ userId: ug.userId, name: ug.userName });
+    list.push({ userId: ug.userId, name: ug.userName, isGuest: ug.isGuest });
     membersByGroup.set(ug.groupId, list);
   }
 

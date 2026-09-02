@@ -19,6 +19,7 @@ const mockUserGroupRepository: jest.Mocked<UserGroupRepository> = {
   getUserGroups: jest.fn(),
   isUserInGroup: jest.fn(),
   save: jest.fn(),
+  reassignUser: jest.fn(),
 };
 
 describe('deleteGroup', () => {
