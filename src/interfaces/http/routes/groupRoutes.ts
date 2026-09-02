@@ -13,6 +13,11 @@ groupRouter.get(
   authenticateJWT,
   groupController.getGroupMembers.bind(groupController)
 );
+groupRouter.post(
+  '/:groupId/members/guest',
+  authenticateJWT,
+  groupController.addGuestMember.bind(groupController)
+);
 groupRouter.get('/', authenticateJWT, groupController.getByUser.bind(groupController));
 groupRouter.delete('/:groupId', authenticateJWT, groupController.delete.bind(groupController));
 

@@ -11,8 +11,8 @@ describe('calculateUserGroupBalance', () => {
     const { user, group } = TestDataGenerator.generateTestScenario();
 
     const members = [
-      { userId: user.id, name: user.name },
-      { userId: 999999, name: 'Other' },
+      { userId: user.id, name: user.name, isGuest: false },
+      { userId: 999999, name: 'Other', isGuest: false },
     ];
 
     const expenses = [
@@ -40,8 +40,8 @@ describe('calculateUserGroupBalance', () => {
 
   it('should simplify cyclic debts when requested', () => {
     const members = [
-      { userId: 1, name: 'A' },
-      { userId: 2, name: 'B' },
+      { userId: 1, name: 'A', isGuest: false },
+      { userId: 2, name: 'B', isGuest: false },
     ];
 
     const expenses = [

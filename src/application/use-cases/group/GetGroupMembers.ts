@@ -31,6 +31,7 @@ export const getGroupMembers = async (
   const members: GroupMemberInfo[] = userGroups.map((ug) => ({
     userId: ug.userId,
     name: ug.userName,
+    isGuest: ug.isGuest,
   }));
 
   return members;

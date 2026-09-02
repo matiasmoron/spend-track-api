@@ -19,7 +19,7 @@ export async function loginUser(
 ): Promise<LoginOutput> {
   const user = await userRepository.getByEmail(data.email);
 
-  if (!user) {
+  if (!user || user.isGuest) {
     throw new AppError('Invalid credentials', 401);
   }
 

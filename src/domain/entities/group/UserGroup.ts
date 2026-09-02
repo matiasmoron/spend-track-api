@@ -11,9 +11,11 @@ export interface UserGroup {
  */
 export interface UserGroupWithUserName extends UserGroup {
   userName: string;
+  isGuest: boolean;
 }
 
 export interface GroupMemberInfo {
   userId: number;
   name: string;
+  isGuest: boolean;
 }

@@ -21,6 +21,7 @@ const mockUserGroupRepository: jest.Mocked<UserGroupRepository> = {
   getUserGroups: jest.fn(),
   isUserInGroup: jest.fn(),
   save: jest.fn(),
+  reassignUser: jest.fn(),
 };
 
 const mockExpenseRepository: jest.Mocked<ExpenseRepository> = {
@@ -36,6 +37,7 @@ const mockExpenseParticipantRepository: jest.Mocked<ExpenseParticipantRepository
   create: jest.fn(),
   findByExpenseId: jest.fn(),
   findByExpenseIds: jest.fn(),
+  reassignUser: jest.fn(),
 };
 
 describe('getGroupById', () => {
@@ -57,7 +59,7 @@ describe('getGroupById', () => {
     mockGroupRepository.findById.mockResolvedValue(group);
 
     // One member in group and the requesting user
-    const userGroupWithName = { ...userGroup, userName: user.name };
+    const userGroupWithName = { ...userGroup, userName: user.name, isGuest: false };
     mockUserGroupRepository.findByGroupId.mockResolvedValue([userGroupWithName]);
 
     // getExpensesByGroup is called internally via expense use-case; mock expense & participants

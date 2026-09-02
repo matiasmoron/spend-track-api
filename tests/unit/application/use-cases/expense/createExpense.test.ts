@@ -55,7 +55,7 @@ describe('createExpense use-case', () => {
     };
 
     const groupMembers: UserGroupWithUserName[] = [
-      { id: 1, groupId: group.id, userId: user.id, userName: user.name },
+      { id: 1, groupId: group.id, userId: user.id, userName: user.name, isGuest: false },
     ];
 
     const mockUserGroupRepo: jest.Mocked<UserGroupRepository> = {
@@ -66,6 +66,7 @@ describe('createExpense use-case', () => {
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),
       save: jest.fn(),
+      reassignUser: jest.fn(),
     };
 
     const result = await createExpense(input, {
@@ -105,7 +106,7 @@ describe('createExpense use-case', () => {
     };
 
     const groupMembers2: UserGroupWithUserName[] = [
-      { id: 2, groupId: group.id, userId: user.id, userName: user.name },
+      { id: 2, groupId: group.id, userId: user.id, userName: user.name, isGuest: false },
     ];
 
     const mockUserGroupRepo: jest.Mocked<UserGroupRepository> = {
@@ -116,6 +117,7 @@ describe('createExpense use-case', () => {
       getUserGroups: jest.fn(),
       isUserInGroup: jest.fn(),
       save: jest.fn(),
+      reassignUser: jest.fn(),
     };
 
     await expect(
