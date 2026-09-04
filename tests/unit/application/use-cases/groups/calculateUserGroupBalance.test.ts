@@ -32,7 +32,7 @@ describe('calculateUserGroupBalance', () => {
       simplify: false,
     });
 
-    expect(Array.isArray(result.expenses)).toBe(true);
+    expect(Array.isArray(result.activity)).toBe(true);
     // No other member owes the user (single participant self-payment)
     expect(result.balanceSummary.length).toBe(0);
     expect(result.memberBalances.length).toBe(0);
@@ -69,5 +69,89 @@ describe('calculateUserGroupBalance', () => {
 
     // Current implementation computes -10 for this scenario (B credited 10)
     expect(result.balanceSummary.find((s) => s.currency === Currency.ARS)?.amount).toBe(-10);
+  });
+
+  it('nets settle-up payments against expense debts, including a partial payment', () => {
+    // Fede (1) always pays. Vale (2) owes him $150, Mati (3) owes him $200.
+    // Vale settles in full, Mati pays $120 of the $200 he owes.
+    const FEDE = 1;
+    const VALE = 2;
+    const MATI = 3;
+
+    const members = [
+      { userId: FEDE, name: 'Fede', isGuest: false },
+      { userId: VALE, name: 'Vale', isGuest: false },
+      { userId: MATI, name: 'Mati', isGuest: false },
+    ];
+
+    const activityItems = [
+      {
+        id: 1,
+        type: 'expense',
+        description: 'Cena',
+        total: 150,
+        currency: Currency.ARS,
+        createdAt: new Date('2026-01-01'),
+        participants: [
+          { userId: FEDE, amount: 150 },
+          { userId: VALE, amount: -150 },
+        ],
+      },
+      {
+        id: 2,
+        type: 'expense',
+        description: 'Hotel',
+        total: 200,
+        currency: Currency.ARS,
+        createdAt: new Date('2026-01-02'),
+        participants: [
+          { userId: FEDE, amount: 200 },
+          { userId: MATI, amount: -200 },
+        ],
+      },
+      {
+        id: 1,
+        type: 'payment',
+        fromUserId: VALE,
+        toUserId: FEDE,
+        title: 'Pago de Vale',
+        amount: 150,
+        currency: Currency.ARS,
+        createdAt: new Date('2026-01-03'),
+        participants: [
+          { userId: VALE, amount: 150 },
+          { userId: FEDE, amount: -150 },
+        ],
+      },
+      {
+        id: 2,
+        type: 'payment',
+        fromUserId: MATI,
+        toUserId: FEDE,
+        title: 'Pago parcial de Mati',
+        amount: 120,
+        currency: Currency.ARS,
+        createdAt: new Date('2026-01-04'),
+        participants: [
+          { userId: MATI, amount: 120 },
+          { userId: FEDE, amount: -120 },
+        ],
+      },
+    ];
+
+    const result = calculateUserGroupBalance(FEDE, members, activityItems as any, {
+      simplify: false,
+    });
+
+    // Vale is fully settled, so they no longer show up in memberBalances.
+    expect(result.memberBalances.find((m) => m.userId === VALE)).toBeUndefined();
+
+    // Mati still owes $80 ($200 - $120), reflected automatically without any
+    // separate "partial payment" bookkeeping.
+    const matiBalance = result.memberBalances.find((m) => m.userId === MATI);
+    expect(matiBalance?.amount).toBe(80);
+
+    expect(result.balanceSummary.find((s) => s.currency === Currency.ARS)?.amount).toBe(80);
+    expect(result.activity).toHaveLength(4);
   });
 });

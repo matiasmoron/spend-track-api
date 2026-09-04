@@ -24,6 +24,7 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
     );
   } else {
     // fallback para errores inesperados
+    console.error(err);
     BaseResponse.error(
       res,
       {

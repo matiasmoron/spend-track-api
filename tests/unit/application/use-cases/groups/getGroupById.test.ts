@@ -5,6 +5,7 @@ import { ExpenseParticipantRepository } from '@/domain/repositories/expense/Expe
 import { ExpenseRepository } from '@/domain/repositories/expense/ExpenseRepository';
 import { GroupRepository } from '@/domain/repositories/group/GroupRepository';
 import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
+import { PaymentRepository } from '@/domain/repositories/payment/PaymentRepository';
 
 const mockGroupRepository: jest.Mocked<GroupRepository> = {
   save: jest.fn(),
@@ -40,6 +41,15 @@ const mockExpenseParticipantRepository: jest.Mocked<ExpenseParticipantRepository
   reassignUser: jest.fn(),
 };
 
+const mockPaymentRepository: jest.Mocked<PaymentRepository> = {
+  create: jest.fn(),
+  update: jest.fn(),
+  findByGroupId: jest.fn(),
+  findByGroupIds: jest.fn(),
+  findById: jest.fn(),
+  delete: jest.fn(),
+};
+
 describe('getGroupById', () => {
   let testData: ReturnType<typeof TestDataGenerator.generateTestScenario>;
 
@@ -65,6 +75,7 @@ describe('getGroupById', () => {
     // getExpensesByGroup is called internally via expense use-case; mock expense & participants
     mockExpenseRepository.findByGroupId.mockResolvedValue([expense]);
     mockExpenseParticipantRepository.findByExpenseId.mockResolvedValue([{ ...participant }]);
+    mockPaymentRepository.findByGroupId.mockResolvedValue([]);
 
     const result = await getGroupById(
       { groupId: group.id, userId: user.id },
@@ -73,6 +84,7 @@ describe('getGroupById', () => {
         userGroupRepository: mockUserGroupRepository,
         expenseRepository: mockExpenseRepository,
         expenseParticipantRepository: mockExpenseParticipantRepository,
+        paymentRepository: mockPaymentRepository,
       }
     );
 
@@ -80,7 +92,7 @@ describe('getGroupById', () => {
     expect(result.id).toBe(group.id);
     expect(result.name).toBe(group.name);
     expect(Array.isArray(result.members)).toBe(true);
-    expect(Array.isArray(result.expenses)).toBe(true);
+    expect(Array.isArray(result.activity)).toBe(true);
   });
 
   it('should throw 404 when group not found', async () => {
@@ -95,6 +107,7 @@ describe('getGroupById', () => {
           userGroupRepository: mockUserGroupRepository,
           expenseRepository: mockExpenseRepository,
           expenseParticipantRepository: mockExpenseParticipantRepository,
+          paymentRepository: mockPaymentRepository,
         }
       )
     ).rejects.toThrow(new AppError('Group not found', 404));
