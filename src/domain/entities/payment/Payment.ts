@@ -11,6 +11,7 @@ export interface PaymentProps {
   description?: string;
   createdAt: Date;
   updatedAt?: Date;
+  clientRequestId?: string;
 }
 
 export class Payment {
@@ -24,6 +25,7 @@ export class Payment {
   readonly description?: string;
   readonly createdAt: Date;
   readonly updatedAt?: Date;
+  readonly clientRequestId?: string;
 
   constructor(props: PaymentProps) {
     this.id = props.id;
@@ -36,5 +38,6 @@ export class Payment {
     this.description = props.description;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
+    this.clientRequestId = props.clientRequestId;
   }
 }

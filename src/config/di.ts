@@ -6,6 +6,7 @@ import { ExpenseParticipantRepository } from '../domain/repositories/expense/Exp
 import { ExpenseRepository } from '../domain/repositories/expense/ExpenseRepository';
 import { GroupRepository } from '../domain/repositories/group/GroupRepository';
 import { UserGroupRepository } from '../domain/repositories/group/UserGroupRepository';
+import { PaymentRepository } from '../domain/repositories/payment/PaymentRepository';
 import { CacheService } from '../infrastructure/cache/CacheService';
 import { CachedExpenseParticipantRepository } from '../infrastructure/cache/repositories/CachedExpenseParticipantRepository';
 import { CachedExpenseRepository } from '../infrastructure/cache/repositories/CachedExpenseRepository';
@@ -15,6 +16,7 @@ import { ExpenseParticipantRepositoryImpl } from '../infrastructure/database/rep
 import { ExpenseRepositoryImpl } from '../infrastructure/database/repositories/ExpenseRepositoryImpl';
 import { GroupRepoImpl } from '../infrastructure/database/repositories/GroupRepoImpl';
 import { InvitationRepositoryImpl } from '../infrastructure/database/repositories/InvitationRepositoryImpl';
+import { PaymentRepositoryImpl } from '../infrastructure/database/repositories/PaymentRepositoryImpl';
 import { UserGroupRepoImpl } from '../infrastructure/database/repositories/UserGroupImpl';
 import { UserRepoImpl } from '../infrastructure/database/repositories/UserRepoImpl';
 import { AuthService } from '../infrastructure/database/services/AuthService';
@@ -39,6 +41,7 @@ export let groupRepository: GroupRepository;
 export let invitationRepository: InvitationRepositoryImpl;
 export let userGroupRepository: UserGroupRepository;
 export let userRepository: UserRepoImpl;
+export let paymentRepository: PaymentRepository;
 export let cacheService: CacheService | null = null;
 
 const initInstances = (cache: CacheService | null) => {
@@ -66,6 +69,7 @@ const initInstances = (cache: CacheService | null) => {
 
   invitationRepository = new InvitationRepositoryImpl();
   userRepository = new UserRepoImpl();
+  paymentRepository = new PaymentRepositoryImpl();
 };
 
 // Initialize the instances and the database
