@@ -12,6 +12,7 @@ import {
   expenseRepository,
   groupRepository,
   invitationRepository,
+  paymentRepository,
   userGroupRepository,
   userRepository,
 } from '../../../config/di';
@@ -60,7 +61,13 @@ export class GroupController {
       const { id: userId } = req.user;
       const result = await getGroupsSummary(
         { userId },
-        { groupRepository, userGroupRepository, expenseRepository, expenseParticipantRepository }
+        {
+          groupRepository,
+          userGroupRepository,
+          expenseRepository,
+          expenseParticipantRepository,
+          paymentRepository,
+        }
       );
       BaseResponse.success(res, result);
     } catch (error) {
@@ -84,6 +91,7 @@ export class GroupController {
         userGroupRepository,
         expenseRepository,
         expenseParticipantRepository,
+        paymentRepository,
       });
 
       BaseResponse.success(res, result);
