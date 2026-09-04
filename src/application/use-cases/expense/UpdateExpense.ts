@@ -49,8 +49,12 @@ export async function updateExpense(
     throw new AppError('You do not have permission to update this expense', 403);
   }
 
-  const totalPaid = paidBy.reduce((sum, p) => sum + p.amount, 0);
-  const totalSplit = splits.reduce((sum, s) => sum + s.amount, 0);
+  // Compare in whole cents to avoid floating-point drift when summing many
+  // participants (e.g. 0.1 + 0.2 !== 0.3 in JS).
+  const toCents = (amount: number) => Math.round(amount * 100);
+  const totalPaidCents = paidBy.reduce((sum, p) => sum + toCents(p.amount), 0);
+  const totalSplitCents = splits.reduce((sum, s) => sum + toCents(s.amount), 0);
+  const totalCents = toCents(total);
 
   // Get group members to validate if all the users from paidBy and splits are in the group
   const groupMembers = await getGroupMembers(
@@ -68,11 +72,11 @@ export async function updateExpense(
     throw new AppError('Some users in splits do not belong to the group', 400);
   }
 
-  if (totalPaid !== total) {
+  if (totalPaidCents !== totalCents) {
     throw new AppError('Sum of paidBy amounts does not match total', 400);
   }
 
-  if (totalSplit !== total) {
+  if (totalSplitCents !== totalCents) {
     throw new AppError('Sum of splits does not match total', 400);
   }
 

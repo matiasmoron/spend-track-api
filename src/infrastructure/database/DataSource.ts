@@ -4,6 +4,7 @@ import { ExpenseModel } from './models/ExpenseModel';
 import { ExpenseParticipantModel } from './models/ExpenseParticipantModel';
 import { GroupModel } from './models/GroupModel';
 import { InvitationModel } from './models/InvitationModel';
+import { PaymentModel } from './models/PaymentModel';
 import { UserGroupModel } from './models/UserGroupModel';
 import { UserModel } from './models/UserModel';
 
@@ -16,6 +17,7 @@ const entities = [
   ExpenseModel,
   ExpenseParticipantModel,
   InvitationModel,
+  PaymentModel,
 ];
 
 const sharedOptions = {

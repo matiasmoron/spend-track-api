@@ -1,4 +1,5 @@
 import { ExpenseDetail } from '@/application/use-cases/expense/GetExpensesByGroup';
+import { PaymentDetail } from '@/application/use-cases/payment/GetPaymentsByGroup';
 import { GroupMemberInfo } from '@/domain/entities/group';
 import { Currency } from '@/domain/value-objects';
 
@@ -21,7 +22,17 @@ export interface UserBalanceSummaryEntry {
   amount: number; // positive if they owe you, negative if you owe
 }
 
-export type ExpenseDetailFormatted = Omit<ExpenseDetail, 'participants'> & {
+// A group's activity is a timeline of expenses and settle-up payments, both of which
+// net out through the same "signed amount per participant" mechanism: positive =
+// contributed/paid, negative = owed/received.
+export type GroupActivityItem =
+  | (ExpenseDetail & { type: 'expense' })
+  | (PaymentDetail & {
+      type: 'payment';
+      participants: { userId: number; amount: number }[];
+    });
+
+export type GroupActivityFormatted = Omit<GroupActivityItem, 'participants'> & {
   participants: {
     userId: number;
     amount: number;
@@ -31,21 +42,21 @@ export type ExpenseDetailFormatted = Omit<ExpenseDetail, 'participants'> & {
 export interface CalculateUserGroupBalanceResult {
   balanceSummary: UserBalanceSummaryEntry[];
   memberBalances: MemberBalanceEntry[];
-  expenses: ExpenseDetailFormatted[];
+  activity: GroupActivityFormatted[];
 }
 
 /**
  * Calculates the balance summary and per-member balances for a user in a group.
  * @param userId   - ID of the querying user
  * @param members  - array of { userId, name } for all group members
- * @param expenses - list of expenses with participant shares
+ * @param activityItems - list of expenses and payments, each with signed participant shares
  * @param simplify - whether to simplify cyclic debts per currency
  * @returns an object containing summary and detailed entries
  */
 export const calculateUserGroupBalance = (
   userId: number,
   members: GroupMemberInfo[],
-  expenses: ExpenseDetail[],
+  activityItems: GroupActivityItem[],
   { simplify = true }: { simplify?: boolean } = { simplify: true }
 ): CalculateUserGroupBalanceResult => {
   // 1) Initialize net balance per user and currency
@@ -55,37 +66,37 @@ export const calculateUserGroupBalance = (
     balances[m.userId] = {};
   });
 
-  const expensesFormatted: ExpenseDetailFormatted[] = [];
+  const activityFormatted: GroupActivityFormatted[] = [];
 
-  // 2) Accumulate net per expense for each other member
-  expenses.forEach((exp) => {
+  // 2) Accumulate net per activity item for each other member
+  activityItems.forEach((item) => {
     const netPerUser: Record<number, number> = {};
 
-    let expenseParticipants = [];
+    let itemParticipants = [];
 
-    exp.participants.forEach((p) => {
+    item.participants.forEach((p) => {
       netPerUser[p.userId] = (netPerUser[p.userId] ?? 0) + Number(p.amount);
 
-      expenseParticipants.push({
+      itemParticipants.push({
         userId: p.userId,
         amount: Number(p.amount),
       });
     });
 
-    // Deep clone expense to avoid mutating original
-    const expenseClone = JSON.parse(
+    // Deep clone activity item to avoid mutating original
+    const itemClone = JSON.parse(
       JSON.stringify({
-        ...exp,
-        participants: expenseParticipants,
+        ...item,
+        participants: itemParticipants,
       })
-    ) as ExpenseDetailFormatted;
-    expensesFormatted.push(expenseClone);
+    ) as GroupActivityFormatted;
+    activityFormatted.push(itemClone);
 
     Object.entries(netPerUser).forEach(([id, net]) => {
       const otherId = Number(id);
       if (otherId === userId) return; // skip self
 
-      balances[otherId][exp.currency] = (balances[otherId][exp.currency] ?? 0) + net;
+      balances[otherId][item.currency] = (balances[otherId][item.currency] ?? 0) + net;
     });
   });
 
@@ -143,5 +154,5 @@ export const calculateUserGroupBalance = (
     });
   });
 
-  return { balanceSummary, memberBalances, expenses: expensesFormatted };
+  return { balanceSummary, memberBalances, activity: activityFormatted };
 };

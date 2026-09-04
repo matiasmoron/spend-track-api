@@ -6,15 +6,18 @@ import {
 import { getGroupMembers } from '@/application/use-cases/group/GetGroupMembers';
 import {
   calculateUserGroupBalance,
-  ExpenseDetailFormatted,
+  GroupActivityFormatted,
+  GroupActivityItem,
   MemberBalanceEntry,
   UserBalanceSummaryEntry,
 } from '@/application/use-cases/group/calculateUserGroupBalance';
+import { getPaymentsByGroup, PaymentDetail } from '@/application/use-cases/payment/GetPaymentsByGroup';
 import { GroupMemberInfo } from '@/domain/entities/group';
 import { ExpenseParticipantRepository } from '@/domain/repositories/expense/ExpenseParticipantRepository';
 import { ExpenseRepository } from '@/domain/repositories/expense/ExpenseRepository';
 import { GroupRepository } from '@/domain/repositories/group/GroupRepository';
 import { UserGroupRepository } from '@/domain/repositories/group/UserGroupRepository';
+import { PaymentRepository } from '@/domain/repositories/payment/PaymentRepository';
 import { GroupType } from '@/domain/value-objects';
 
 export interface GetGroupByIdInput {
@@ -29,10 +32,31 @@ export interface GetGroupByIdOutput {
   members: GroupMemberInfo[];
   balanceSummary: UserBalanceSummaryEntry[];
   memberBalances: MemberBalanceEntry[];
-  expenses: ExpenseDetailFormatted[];
+  activity: GroupActivityFormatted[];
   createdAt: Date;
   updatedAt: Date;
 }
+
+const toActivityItems = (expenses: ExpenseDetail[], payments: PaymentDetail[]): GroupActivityItem[] => {
+  const expenseItems: GroupActivityItem[] = expenses.map(
+    (e): GroupActivityItem => ({ ...e, type: 'expense' })
+  );
+
+  const paymentItems: GroupActivityItem[] = payments.map(
+    (p): GroupActivityItem => ({
+      ...p,
+      type: 'payment',
+      participants: [
+        { userId: p.fromUserId, amount: p.amount },
+        { userId: p.toUserId, amount: -p.amount },
+      ],
+    })
+  );
+
+  return [...expenseItems, ...paymentItems].sort(
+    (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+  );
+};
 
 /**
  * Returns group details including per-user balances
@@ -45,10 +69,16 @@ export const getGroupById = async (
     userGroupRepository: UserGroupRepository;
     expenseRepository: ExpenseRepository;
     expenseParticipantRepository: ExpenseParticipantRepository;
+    paymentRepository: PaymentRepository;
   }
 ): Promise<GetGroupByIdOutput> => {
-  const { groupRepository, userGroupRepository, expenseRepository, expenseParticipantRepository } =
-    deps;
+  const {
+    groupRepository,
+    userGroupRepository,
+    expenseRepository,
+    expenseParticipantRepository,
+    paymentRepository,
+  } = deps;
 
   const { groupId, userId } = input;
 
@@ -59,14 +89,16 @@ export const getGroupById = async (
   // Get group members
   const groupMembers = await getGroupMembers({ groupId, userId }, { userGroupRepository });
 
-  // Fetch expenses & prepare details
-  const expensesRaw: ExpenseDetail[] = await getExpensesByGroup(
-    { groupId: input.groupId },
-    { expenseRepository, expenseParticipantRepository }
-  );
+  // Fetch expenses and payments
+  const [expensesRaw, paymentsRaw] = await Promise.all([
+    getExpensesByGroup({ groupId: input.groupId }, { expenseRepository, expenseParticipantRepository }),
+    getPaymentsByGroup({ groupId: input.groupId }, { paymentRepository }),
+  ]);
+
+  const activityItems = toActivityItems(expensesRaw, paymentsRaw);
 
   // Compute balances for the requesting user
-  const userBalance = calculateUserGroupBalance(input.userId, groupMembers, expensesRaw, {
+  const userBalance = calculateUserGroupBalance(input.userId, groupMembers, activityItems, {
     simplify: false,
   });
 
@@ -77,7 +109,7 @@ export const getGroupById = async (
     members: groupMembers,
     balanceSummary: userBalance.balanceSummary,
     memberBalances: userBalance.memberBalances,
-    expenses: userBalance.expenses,
+    activity: userBalance.activity,
     createdAt: group.createdAt,
     updatedAt: group.updatedAt,
   };
